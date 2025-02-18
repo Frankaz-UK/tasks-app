@@ -30,14 +30,14 @@ const form = useForm({
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
-            <div class="form-group row mt-6">
+            <div class="mt-2 form-group row">
                 <InputLabel class="col-sm-2 col-form-label" for="name" value="Name" />
                 <div class="col-sm-10">
                     <TextInput class="form-control" id="name" type="text" v-model="form.name" required autofocus autocomplete="name" />
                     <InputError class="mt-2" :message="form.errors.name" />
                 </div>
             </div>
-            <div class="form-group row mt-6">
+            <div class="mt-2 form-group row">
                 <InputLabel class="col-sm-2 col-form-label" for="email" value="Email" />
                 <div class="col-sm-10">
                     <TextInput class="form-control" id="email" type="email" v-model="form.email" required autocomplete="username" />
@@ -53,7 +53,7 @@ const form = useForm({
                     A new verification link has been sent to your email address.
                 </div>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 mt-2">
                 <PrimaryButton class="btn btn-primary" :disabled="form.processing">Save</PrimaryButton>
                 <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0" leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
                     <p v-if="form.recentlySuccessful" class="mt-2 font-weight-medium text-success">Saved.</p>

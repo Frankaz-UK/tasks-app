@@ -46,10 +46,10 @@ const closeModal = () => {
         </header>
         <button class="btn btn-danger" @click="confirmUserDeletion">Delete Account</button>
         <Modal :show="confirmingUserDeletion" @close="closeModal">
-            <div class="p-6">
+            <div class="p-4">
                 <h2 class="h5 font-weight-medium text-dark">Are you sure you want to delete your account?</h2>
                 <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.</p>
-                <div class="form-group row mt-6">
+                <div class="form-group row mt-4">
                     <InputLabel class="col-sm-2 col-form-label" for="password" value="Password" />
                     <div class="col-sm-10">
                         <TextInput id="password" ref="passwordInput" v-model="form.password" type="password" class="form-control" placeholder="Password" @keyup.enter="deleteUser" />
