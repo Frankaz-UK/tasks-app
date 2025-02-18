@@ -23,46 +23,42 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <template #header>
+            <h2 class="h2">Forgot Password</h2>
+        </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
-        </div>
-
-        <div
-            v-if="status"
-            class="mb-4 text-sm font-medium text-green-600"
-        >
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+        <div class="py-5">
+            <div class="container">
+                <div class="card shadow-sm">
+                    <div class="bg-white p-4 shadow-sm rounded-lg">
+                        <section>
+                            <header>
+                                <h2 class="font-weight-medium text-dark">Forgot Password</h2>
+                                <p class="mt-1 small text-muted">
+                                    Forgot your password? No problem. Just let us know your email
+                                    address and we will email you a password reset link that will allow
+                                    you to choose a new one.
+                                </p>
+                                <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+                                    {{ status }}
+                                </div>
+                            </header>
+                            <form @submit.prevent="submit">
+                                <div class="mt-2 form-group row">
+                                    <InputLabel class="col-sm-2 col-form-label" for="email" value="Email" />
+                                    <div class="col-sm-10">
+                                        <TextInput id="email" type="email" class="form-control" v-model="form.email" autofocus autocomplete="username" />
+                                        <InputError class="mt-2" :message="form.errors.email" />
+                                    </div>
+                                </div>
+                                <div class="mt-4 d-flex align-items-center justify-content-end gap-4">
+                                    <button class="btn btn-primary" :disabled="form.processing">Email Password Reset Link</button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
             </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
+        </div>
     </GuestLayout>
 </template>

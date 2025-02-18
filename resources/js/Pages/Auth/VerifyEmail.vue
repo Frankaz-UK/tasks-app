@@ -23,39 +23,37 @@ const verificationLinkSent = computed(
 
 <template>
     <GuestLayout>
-        <Head title="Email Verification" />
+        <template #header>
+            <h2 class="h2">Verify Email</h2>
+        </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            Thanks for signing up! Before getting started, could you verify your
-            email address by clicking on the link we just emailed to you? If you
-            didn't receive the email, we will gladly send you another.
-        </div>
-
-        <div
-            class="mb-4 text-sm font-medium text-green-600"
-            v-if="verificationLinkSent"
-        >
-            A new verification link has been sent to the email address you
-            provided during registration.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Resend Verification Email
-                </PrimaryButton>
-
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >Log Out</Link
-                >
+        <div class="py-5">
+            <div class="container">
+                <div class="card shadow-sm">
+                    <div class="bg-white p-4 shadow-sm rounded-lg">
+                        <section>
+                            <header>
+                                <h2 class="font-weight-medium text-dark">Verify Email</h2>
+                                <div class="mt-1 small text-muted">
+                                    Thanks for signing up! Before getting started, could you verify your
+                                    email address by clicking on the link we just emailed to you? If you
+                                    didn't receive the email, we will gladly send you another.
+                                </div>
+                                <div class="mt-2 font-weight-medium text-success" v-if="verificationLinkSent">
+                                    A new verification link has been sent to the email address you
+                                    provided during registration.
+                                </div>
+                            </header>
+                            <form @submit.prevent="submit">
+                                <div class="mt-4 d-flex align-items-center justify-content-center gap-4">
+                                    <button class="btn btn-primary" :disabled="form.processing">Resend Verification Email</button>
+                                    <Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </GuestLayout>
 </template>
