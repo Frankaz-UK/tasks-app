@@ -36,10 +36,10 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
-            <p class="mt-1 text-sm text-gray-600">Ensure your account is using a long, random password to stay secure.</p>
+            <h2 class="h5 font-weight-medium text-dark">Update Password</h2>
+            <p class="mt-1 small text-muted">Ensure your account is using a long, random password to stay secure.</p>
         </header>
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+        <form @submit.prevent="updatePassword" class="mt-4 mb-4">
             <div class="mt-2 form-group row">
                 <InputLabel class="col-sm-2 col-form-label" for="current_password" value="Current Password" />
                 <div class="col-sm-10">
