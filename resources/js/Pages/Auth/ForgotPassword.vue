@@ -38,9 +38,7 @@ const submit = () => {
                                     address and we will email you a password reset link that will allow
                                     you to choose a new one.
                                 </p>
-                                <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-                                    {{ status }}
-                                </div>
+                                <div v-if="status" class="mt-2 font-weight-medium text-success">{{ status }}</div>
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
