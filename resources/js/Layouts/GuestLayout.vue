@@ -1,5 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineProps({
     canLogin: {
@@ -31,9 +32,9 @@ function handleImageError() {
         <div class="shadow">
             <div class="row header-div pt-2 pb-2">
                 <div class="col-6">
-                    <header v-if="$slots.header">
-                        <div class="container">
-                            <h2><slot name="header" /></h2>
+                    <header>
+                        <div class="d-inline-flex gap-2">
+                            <Link :href="route('home')"><ApplicationLogo class="d-inline-block"/></Link>
                         </div>
                     </header>
                 </div>

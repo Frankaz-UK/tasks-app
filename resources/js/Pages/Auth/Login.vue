@@ -47,7 +47,6 @@ const submit = () => {
 <template>
     <Head title="Login" />
     <GuestLayout :laravel-version="laravelVersion" :php-version="phpVersion" :can-login="canLogin" :can-register="canRegister">
-        <template #header>Login</template>
 
         <div class="py-5">
             <div class="container">

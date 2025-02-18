@@ -24,7 +24,6 @@ const verificationLinkSent = computed(
 <template>
     <GuestLayout>
         <Head title="Verify Email" />
-        <template #header>Verify Email</template>
 
         <div class="py-5">
             <div class="container">

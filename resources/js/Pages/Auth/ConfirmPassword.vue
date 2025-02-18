@@ -20,7 +20,6 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Confirm Password" />
-        <template #header>Confirm Password</template>
 
         <div class="py-5">
             <div class="container">

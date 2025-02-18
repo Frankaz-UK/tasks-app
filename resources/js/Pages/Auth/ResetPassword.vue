@@ -34,7 +34,6 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Reset Password" />
-        <template #header>Reset Password</template>
 
         <div class="py-5">
             <div class="container">

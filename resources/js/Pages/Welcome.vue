@@ -30,7 +30,6 @@ function handleImageError() {
 <template>
     <GuestLayout :laravel-version="laravelVersion" :php-version="phpVersion" :can-login="canLogin" :can-register="canRegister">
         <Head title="Welcome" />
-        <template v-slot:header>Welcome</template>
 
         <div class="py-5">
             <div class="container">

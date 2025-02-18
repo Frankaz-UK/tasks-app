@@ -18,7 +18,6 @@ defineProps({
 <template>
     <AuthenticatedLayout>
         <Head title="Edit Profile" />
-        <template #header>Edit Profile</template>
 
         <div class="py-5">
             <div class="container">

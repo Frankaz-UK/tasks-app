@@ -1,6 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 import { BDropdown, BDropdownItem } from "bootstrap-vue-next";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const location = defineModel({ default: window.location.href, type: String });
 </script>
@@ -10,9 +11,9 @@ const location = defineModel({ default: window.location.href, type: String });
         <div class="shadow">
             <div class="row header-div pt-2 pb-2">
                 <div class="col-6">
-                    <header v-if="$slots.header">
-                        <div class="container ">
-                            <h2><slot name="header" /></h2>
+                    <header>
+                        <div class="d-inline-flex gap-2">
+                            <Link :href="route('home')"><ApplicationLogo class="d-inline-block"/></Link>
                         </div>
                     </header>
                 </div>

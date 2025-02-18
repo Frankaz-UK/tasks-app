@@ -6,7 +6,6 @@ import {Head} from "@inertiajs/vue3";
 <template>
     <AuthenticatedLayout>
         <Head title="Dashboard" />
-        <template #header>Dashboard</template>
 
         <div class="py-5">
             <div class="container">
