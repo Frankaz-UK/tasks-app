@@ -31,9 +31,8 @@ const location = defineModel({ default: window.location.href, type: String });
             <slot />
         </main>
         <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-            <div>
-                &copy Frankaz {{ new Date().getFullYear() }}
-            </div>
+            <div v-if="laravelVersion !== '' && laravelVersion != null">Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})</div>
+            <div>&copy Frankaz {{ new Date().getFullYear() }}</div>
         </footer>
     </div>
 </template>
