@@ -41,7 +41,7 @@ const closeModal = () => {
 <template>
     <section class="mb-4">
         <header>
-            <h2 class="h5 font-weight-medium text-dark">Delete Account</h2>
+            <h2 class="font-weight-medium text-dark">Delete Account</h2>
             <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.</p>
         </header>
         <button class="btn btn-danger" @click="confirmUserDeletion">Delete Account</button>

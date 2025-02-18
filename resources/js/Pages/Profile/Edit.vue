@@ -26,13 +26,13 @@ defineProps({
         <div class="py-5">
             <div class="container">
                 <div class="card shadow-sm">
-                    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                    <div class="bg-white p-4 shadow-sm rounded-lg">
                         <UpdateProfileInformationForm :must-verify-email="mustVerifyEmail" :status="status" class="max-w-xl" />
                     </div>
-                    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                    <div class="bg-white p-4 shadow-sm rounded-lg">
                         <UpdatePasswordForm class="max-w-xl" />
                     </div>
-                    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                    <div class="bg-white p-4 shadow-sm rounded-lg">
                         <DeleteUserForm class="max-w-xl" />
                     </div>
                 </div>
