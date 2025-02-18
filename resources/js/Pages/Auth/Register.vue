@@ -23,9 +23,7 @@ const submit = () => {
 <template>
     <GuestLayout>
         <template #header>
-            <h2 class="h2">
-                Register
-            </h2>
+            <h2 class="h2">Register</h2>
         </template>
 
         <div class="py-5">
