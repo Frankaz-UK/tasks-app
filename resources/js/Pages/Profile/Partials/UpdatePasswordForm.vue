@@ -36,7 +36,7 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="h5 font-weight-medium text-dark">Update Password</h2>
+            <h2 class="font-weight-medium text-dark">Update Password</h2>
             <p class="mt-1 small text-muted">Ensure your account is using a long, random password to stay secure.</p>
         </header>
         <form @submit.prevent="updatePassword" class="mt-4 mb-4">
