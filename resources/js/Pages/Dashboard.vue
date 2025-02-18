@@ -5,10 +5,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="h2">
+
                 Dashboard
-            </h2>
-        </template>
+            </template>
 
         <div class="py-5">
             <div class="container">

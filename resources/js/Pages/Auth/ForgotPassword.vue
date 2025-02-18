@@ -24,8 +24,7 @@ const submit = () => {
 <template>
     <GuestLayout>
         <template #header>
-            <h2 class="h2">Forgot Password</h2>
-        </template>
+            Forgot Password</template>
 
         <div class="py-5">
             <div class="container">
