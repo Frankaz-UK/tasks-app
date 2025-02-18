@@ -17,10 +17,8 @@ defineProps({
 
 <template>
     <AuthenticatedLayout>
-        <template #header>
-
-                Edit Profile
-            </template>
+        <Head title="Edit Profile" />
+        <template #header>Edit Profile</template>
 
         <div class="py-5">
             <div class="container">

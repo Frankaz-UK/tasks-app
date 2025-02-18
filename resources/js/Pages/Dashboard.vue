@@ -1,13 +1,12 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import {Head} from "@inertiajs/vue3";
 </script>
 
 <template>
     <AuthenticatedLayout>
-        <template #header>
-
-                Dashboard
-            </template>
+        <Head title="Dashboard" />
+        <template #header>Dashboard</template>
 
         <div class="py-5">
             <div class="container">

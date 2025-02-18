@@ -23,8 +23,8 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <template #header>
-            Forgot Password</template>
+        <Head title="Forgot Password" />
+        <template #header>Forgot Password</template>
 
         <div class="py-5">
             <div class="container">
