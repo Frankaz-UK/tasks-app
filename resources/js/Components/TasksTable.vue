@@ -1,65 +1,3 @@
-<script setup>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { reactive, ref, onMounted } from 'vue';
-import { BTable, BPagination } from "bootstrap-vue-next";
-
-
-// Data
-const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-let current_page = ref(1);
-let last_page = ref(1);
-let per_page = ref(15);
-let total_rows = ref(0);
-let term = ref(null);
-const fields = reactive([
-    {
-        key: 'id',
-        label: '#',
-    },
-    {
-        key: 'name',
-        label: 'Name',
-    },
-    {
-        key: 'complete',
-        label: 'Actions',
-    }
-]);
-let items = reactive([]);
-
-// Methods
-const fetchData = function(page) {
-    if (page) {
-        current_page.value = page;
-    }
-
-    let indexRoute = route('tasks.api.index', {
-        _query: {
-            page: current_page.value,
-            term: term.value,
-            per_page: per_page.value,
-        },
-    });
-    axios.get(indexRoute)
-        .then(({data}) => {
-            items = data.results.data;
-            current_page.value = data.results.current_page;
-            last_page.value = data.results.last_page;
-            total_rows.value = data.results.total;
-            per_page.value = data.results.per_page;
-        });
-}
-
-const fetchRoute = function(routename, param) {
-    return route(routename, param);
-}
-
-// Mounted
-onMounted(() => {
-    fetchData();
-})
-</script>
-
 <template>
     <div>
         <div class="row">
@@ -67,7 +5,7 @@ onMounted(() => {
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
             </div>
         </div>
-        <BTable striped hover :items="items" :fields="fields">
+        <b-table striped hover :items="items" :fields="fields">
             <template #cell(name)="data">
                 <div v-if="data.item.complete">
                     <del>{{ data.item.name }}</del>
@@ -98,10 +36,10 @@ onMounted(() => {
                     </div>
                 </div>
             </template>
-        </BTable>
+        </b-table>
         <div class="row">
             <div class="col-9">
-                <BPagination @click="fetchData()" :per-page="per_page" v-model="current_page" :total-rows="total_rows"></BPagination>
+                <b-pagination @click="fetchData()" :per-page="per_page" v-model="current_page" :total-rows="total_rows"></b-pagination>
             </div>
             <div class="col-3">
                 <select @change="fetchData(1)" name="per_page" id="per_page" v-model="per_page" class="form-select">
@@ -115,3 +53,67 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<script>
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import { BTable, BPagination } from "bootstrap-vue-next";
+
+export default {
+    name: 'Tasks Table',
+    components: { FontAwesomeIcon, BPagination, BTable },
+    data() {
+        return {
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            current_page: 1,
+            last_page: 1,
+            per_page: 15,
+            total_rows: 0,
+            term: null,
+            fields: [
+                {
+                    key: 'id',
+                    label: '#',
+                },
+                {
+                    key: 'name',
+                    label: 'Name',
+                },
+                {
+                    key: 'complete',
+                    label: 'Actions',
+                }
+            ],
+            items: [],
+        }
+    },
+    mounted() {
+        this.fetchData();
+    },
+    methods: {
+        fetchData(page) {
+            if (page) {
+                this.current_page = page;
+            }
+
+            let indexRoute = route('tasks.api.index', {
+                _query: {
+                    page: this.current_page,
+                    term: this.term,
+                    perpage: this.per_page,
+                },
+            });
+            axios.get(indexRoute)
+                .then(({data}) => {
+                    this.items = data.results.data;
+                    this.current_page = data.results.current_page;
+                    this.last_page = data.results.last_page;
+                    this.total_rows = data.results.total;
+                    this.per_page = data.results.per_page;
+                });
+        },
+        fetchRoute(routename, param) {
+            return route(routename, param);
+        }
+    },
+}
+</script>
