@@ -4,6 +4,17 @@ import { BDropdown, BDropdownItem } from "bootstrap-vue-next";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const location = defineModel({ default: window.location.href, type: String });
+
+defineProps({
+    laravelVersion: {
+        type: String,
+        required: false,
+    },
+    phpVersion: {
+        type: String,
+        required: false,
+    },
+});
 </script>
 
 <template>
