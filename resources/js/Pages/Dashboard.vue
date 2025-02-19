@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from "@inertiajs/vue3";
+import TasksTable from "@/Components/TasksTable.vue";
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import {Head} from "@inertiajs/vue3";
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
                         You're logged in!
+                        <tasks-table></tasks-table>
                     </div>
                 </div>
             </div>
