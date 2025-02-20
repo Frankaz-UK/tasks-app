@@ -29,8 +29,8 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <label class="col-sm-2 col-form-label" for="password" value="Password" />
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-2 col-form-label" for="password">Password</label>
+                                        <div class="col-sm-10">
                                         <input id="password" type="password" class="form-control" v-model="form.password" required autocomplete="current-password" autofocus />
                                         <InputError class="mt-2" :message="form.errors.password" />
                                     </div>

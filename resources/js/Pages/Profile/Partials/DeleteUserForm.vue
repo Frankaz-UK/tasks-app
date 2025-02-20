@@ -46,7 +46,7 @@ const closeModal = () => {
                 <h2 class="h5 font-weight-medium text-dark">Are you sure you want to delete your account?</h2>
                 <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.</p>
                 <div class="form-group row mt-4">
-                    <label class="col-sm-2 col-form-label" for="password" value="Password" />
+                    <label class="col-sm-2 col-form-label" for="password">Password</label>
                     <div class="col-sm-10">
                         <input id="password" ref="passwordInput" v-model="form.password" type="password" class="form-control" placeholder="Password" @keyup.enter="deleteUser" />
                         <InputError :message="form.errors.password" class="mt-2" />

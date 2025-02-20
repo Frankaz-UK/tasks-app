@@ -43,21 +43,21 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <label class="col-sm-2 col-form-label" for="email" value="Email" />
+                                    <label class="col-sm-2 col-form-label" for="email">Email</label>
                                     <div class="col-sm-10">
                                         <input id="email" type="email" class="form-control" v-model="form.email" required autofocus autocomplete="username" />
                                         <InputError class="mt-2" :message="form.errors.email" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <label class="col-sm-2 col-form-label" for="password" value="Password" />
+                                    <label class="col-sm-2 col-form-label" for="password">Password</label>
                                     <div class="col-sm-10">
                                         <input id="password" type="password" class="form-control" v-model="form.password" required autocomplete="new-password" />
                                         <InputError class="mt-2" :message="form.errors.password" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <label class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password"/>
+                                    <label class="col-sm-2 col-form-label" for="password_confirmation">Confirm Password</label>
                                     <div class="col-sm-10">
                                         <input id="password_confirmation" type="password" class="form-control" v-model="form.password_confirmation" required autocomplete="new-password" />
                                         <InputError class="mt-2" :message="form.errors.password_confirmation" />

@@ -38,21 +38,21 @@ const updatePassword = () => {
         </header>
         <form @submit.prevent="updatePassword" class="mt-4 mb-4">
             <div class="mt-2 form-group row">
-                <label class="col-sm-2 col-form-label" for="current_password" value="Current Password" />
+                <label class="col-sm-2 col-form-label" for="current_password">Current Password</label>
                 <div class="col-sm-10">
                     <input id="current_password" ref="currentPasswordInput" v-model="form.current_password" type="password" class="form-control" autocomplete="current-password" />
                     <InputError :message="form.errors.current_password" class="mt-2" />
                 </div>
             </div>
             <div class="mt-2 form-group row">
-                <label class="col-sm-2 col-form-label" for="password" value="New Password" />
+                <label class="col-sm-2 col-form-label" for="password">New Password</label>
                 <div class="col-sm-10">
                     <input id="password" ref="passwordInput" v-model="form.password" type="password" class="form-control" autocomplete="new-password" />
                     <InputError :message="form.errors.password" class="mt-2" />
                 </div>
             </div>
             <div class="mt-2 form-group row">
-                <label class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password" />
+                <label class="col-sm-2 col-form-label" for="password_confirmation">Confirm Password</label>
                 <div class="col-sm-10">
                     <input id="password_confirmation" v-model="form.password_confirmation" type="password" class="form-control" autocomplete="new-password" />
                     <InputError :message="form.errors.password_confirmation" class="mt-2" />
