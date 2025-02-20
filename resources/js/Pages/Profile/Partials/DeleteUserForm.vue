@@ -1,12 +1,10 @@
 <script setup>
-import DangerButton from '@/Components/DangerButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Modal from '@/Components/Modal.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
+import { BModal } from "bootstrap-vue-next";
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
@@ -45,7 +43,7 @@ const closeModal = () => {
             <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.</p>
         </header>
         <button class="btn btn-danger" @click="confirmUserDeletion">Delete Account</button>
-        <Modal :show="confirmingUserDeletion" @close="closeModal">
+        <BModal v-model="confirmingUserDeletion" title="Delete Account" @hide="closeModal" size="xl">
             <div class="p-4">
                 <h2 class="h5 font-weight-medium text-dark">Are you sure you want to delete your account?</h2>
                 <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.</p>
@@ -56,11 +54,9 @@ const closeModal = () => {
                         <InputError :message="form.errors.password" class="mt-2" />
                     </div>
                 </div>
-                <div class="mt-4 d-flex justify-content-end">
-                    <button class="btn btn-outline-warning ms-3" @click="closeModal">Cancel</button>
-                    <button class="btn btn-outline-danger ms-3" :disabled="form.processing" @click="deleteUser">Delete Account</button>
-                </div>
             </div>
-        </Modal>
+            <template #cancel><button class="btn btn-outline-warning ms-3" @click="closeModal">Cancel</button></template>
+            <template #ok><button class="btn btn-outline-danger ms-3" :disabled="form.processing" @click="deleteUser">Delete Account</button></template>
+        </BModal>
     </section>
 </template>
