@@ -28,33 +28,33 @@ function handleImageError() {
 </script>
 
 <template>
-    <div class="bg-light text-muted">
-        <div class="shadow">
-            <div class="row header-div pt-2 pb-2">
-                <div class="col-6">
-                    <header>
+    <div>
+        <header class="shadow">
+            <div class="header-div">
+                <div class="row pt-2 pb-2">
+                    <div class="col-6">
                         <div class="d-inline-flex gap-2">
                             <Link :href="route('home')"><ApplicationLogo class="d-inline-block"/></Link>
                         </div>
-                    </header>
-                </div>
-                <div class="col-6">
-                    <div class="container">
-                        <nav v-if="canLogin" class="text-end">
-                            <template v-if="$page.props.auth.user">
-                                <Link :href="route('dashboard')" class="btn btn-primary">Dashboard</Link>
-                                <span class="p-2"> </span>
-                                <Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link>
-                            </template>
-                            <template v-else>
-                                <Link :href="route('login')" class="btn btn-primary m-1">Log in</Link>
-                                <Link v-if="canRegister" :href="route('register')" class="btn btn-secondary m-1">Register</Link>
-                            </template>
-                        </nav>
+                    </div>
+                    <div class="col-6">
+                        <div class="container">
+                            <nav v-if="canLogin" class="text-end">
+                                <template v-if="$page.props.auth.user">
+                                    <Link :href="route('dashboard')" class="btn btn-primary">Dashboard</Link>
+                                    <span class="p-2"> </span>
+                                    <Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link>
+                                </template>
+                                <template v-else>
+                                    <Link :href="route('login')" class="btn btn-primary m-1">Log in</Link>
+                                    <Link v-if="canRegister" :href="route('register')" class="btn btn-secondary m-1">Register</Link>
+                                </template>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
         <main>
             <slot />
         </main>

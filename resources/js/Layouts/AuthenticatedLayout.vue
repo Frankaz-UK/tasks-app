@@ -18,27 +18,27 @@ defineProps({
 </script>
 
 <template>
-    <div class="bg-light text-muted">
-        <div class="shadow">
-            <div class="row header-div pt-2 pb-2">
-                <div class="col-6">
-                    <header>
+    <div>
+        <header class="shadow">
+            <div class="header-div">
+                <div class="row pt-2 pb-2">
+                    <div class="col-6">
                         <div class="d-inline-flex gap-2">
                             <Link :href="route('home')"><ApplicationLogo class="d-inline-block"/></Link>
                         </div>
-                    </header>
-                </div>
-                <div class="col-6 text-end">
-                    <div class="d-inline-flex gap-2">
-                        <BDropdown :text="$page.props.auth.user.name" variant="primary">
-                            <BDropdownItem :active="location === route('dashboard')" :href="route('dashboard')">Dashboard</BDropdownItem>
-                            <BDropdownItem :active="location === route('profile.edit')" :href="route('profile.edit')">Edit Profile</BDropdownItem>
-                        </BDropdown>
-                        <div><Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link></div>
+                    </div>
+                    <div class="col-6 text-end">
+                        <div class="d-inline-flex gap-2">
+                            <BDropdown :text="$page.props.auth.user.name" variant="primary">
+                                <BDropdownItem :active="location === route('dashboard')" :href="route('dashboard')">Dashboard</BDropdownItem>
+                                <BDropdownItem :active="location === route('profile.edit')" :href="route('profile.edit')">Edit Profile</BDropdownItem>
+                            </BDropdown>
+                            <div><Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
         <main>
             <slot />
         </main>
