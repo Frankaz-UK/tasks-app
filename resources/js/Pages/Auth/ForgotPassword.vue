@@ -1,9 +1,6 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -41,9 +38,9 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="email" value="Email" />
+                                    <label class="col-sm-2 col-form-label" for="email" value="Email" />
                                     <div class="col-sm-10">
-                                        <TextInput id="email" type="email" class="form-control" v-model="form.email" autofocus autocomplete="username" />
+                                        <input id="email" type="email" class="form-control" v-model="form.email" autofocus autocomplete="username" />
                                         <InputError class="mt-2" :message="form.errors.email" />
                                     </div>
                                 </div>

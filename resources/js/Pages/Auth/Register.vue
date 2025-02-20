@@ -1,9 +1,6 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -35,30 +32,30 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="name" value="Name" />
+                                    <label class="col-sm-2 col-form-label" for="name" value="Name" />
                                     <div class="col-sm-10">
-                                        <TextInput id="name" type="text" class="form-control" v-model="form.name" autofocus autocomplete="name" />
+                                        <input id="name" type="text" class="form-control" v-model="form.name" autofocus autocomplete="name" />
                                         <InputError class="mt-2" :message="form.errors.name" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="email" value="Email" />
+                                    <label class="col-sm-2 col-form-label" for="email" value="Email" />
                                     <div class="col-sm-10">
-                                        <TextInput id="email" type="email" class="form-control" v-model="form.email" autocomplete="username" />
+                                        <input id="email" type="email" class="form-control" v-model="form.email" autocomplete="username" />
                                         <InputError class="mt-2" :message="form.errors.email" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="password" value="Password" />
+                                    <label class="col-sm-2 col-form-label" for="password" value="Password" />
                                     <div class="col-sm-10">
-                                        <TextInput id="password" type="password" class="form-control" v-model="form.password" autocomplete="new-password" />
+                                        <input id="password" type="password" class="form-control" v-model="form.password" autocomplete="new-password" />
                                         <InputError class="mt-2" :message="form.errors.password" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password" />
+                                    <label class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password" />
                                     <div class="col-sm-10">
-                                        <TextInput id="password_confirmation" type="password" class="form-control" v-model="form.password_confirmation" autocomplete="new-password" />
+                                        <input id="password_confirmation" type="password" class="form-control" v-model="form.password_confirmation" autocomplete="new-password" />
                                         <InputError class="mt-2" :message="form.errors.password_confirmation" />
                                     </div>
                                 </div>

@@ -2,9 +2,6 @@
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -59,22 +56,22 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="email" value="Email" />
+                                    <label class="col-sm-2 col-form-label" for="email" value="Email" />
                                     <div class="col-sm-10">
-                                        <TextInput id="email" type="email" class="form-control" v-model="form.email" required autofocus autocomplete="username" />
+                                        <input id="email" type="email" class="form-control" v-model="form.email" required autofocus autocomplete="username" />
                                         <InputError class="mt-2" :message="form.errors.email" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
-                                    <InputLabel class="col-sm-2 col-form-label" for="password" value="Password" />
+                                    <label class="col-sm-2 col-form-label" for="password" value="Password" />
                                     <div class="col-sm-10">
-                                        <TextInput id="password" type="password" class="form-control" v-model="form.password" required autocomplete="current-password" />
+                                        <input id="password" type="password" class="form-control" v-model="form.password" required autocomplete="current-password" />
                                         <InputError class="mt-2" :message="form.errors.password" />
                                     </div>
                                 </div>
                                 <div class="mt-4 d-flex align-items-center justify-content-center gap-4">
                                     <label class="flex items-center">
-                                        <Checkbox name="remember" v-model:checked="form.remember" />
+                                        <input type="checkbox" name="remember" :checked="form.remember" />
                                         <span class="p-1"> </span>
                                         <label class="form-label" for="remember">Remember Me</label>
                                     </label>

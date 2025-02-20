@@ -1,8 +1,5 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -41,28 +38,28 @@ const updatePassword = () => {
         </header>
         <form @submit.prevent="updatePassword" class="mt-4 mb-4">
             <div class="mt-2 form-group row">
-                <InputLabel class="col-sm-2 col-form-label" for="current_password" value="Current Password" />
+                <label class="col-sm-2 col-form-label" for="current_password" value="Current Password" />
                 <div class="col-sm-10">
-                    <TextInput id="current_password" ref="currentPasswordInput" v-model="form.current_password" type="password" class="form-control" autocomplete="current-password" />
+                    <input id="current_password" ref="currentPasswordInput" v-model="form.current_password" type="password" class="form-control" autocomplete="current-password" />
                     <InputError :message="form.errors.current_password" class="mt-2" />
                 </div>
             </div>
             <div class="mt-2 form-group row">
-                <InputLabel class="col-sm-2 col-form-label" for="password" value="New Password" />
+                <label class="col-sm-2 col-form-label" for="password" value="New Password" />
                 <div class="col-sm-10">
-                    <TextInput id="password" ref="passwordInput" v-model="form.password" type="password" class="form-control" autocomplete="new-password" />
+                    <input id="password" ref="passwordInput" v-model="form.password" type="password" class="form-control" autocomplete="new-password" />
                     <InputError :message="form.errors.password" class="mt-2" />
                 </div>
             </div>
             <div class="mt-2 form-group row">
-                <InputLabel class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password" />
+                <label class="col-sm-2 col-form-label" for="password_confirmation" value="Confirm Password" />
                 <div class="col-sm-10">
-                    <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password" class="form-control" autocomplete="new-password" />
+                    <input id="password_confirmation" v-model="form.password_confirmation" type="password" class="form-control" autocomplete="new-password" />
                     <InputError :message="form.errors.password_confirmation" class="mt-2" />
                 </div>
             </div>
             <div class="flex items-center gap-4 mt-2">
-                <PrimaryButton class="btn btn-primary" :disabled="form.processing">Save</PrimaryButton>
+                <button class="btn btn-primary" :disabled="form.processing">Save</button>
                 <Transition enter-active-class="transition ease-in-out" enter-from-class="opacity-0" leave-active-class="transition ease-in-out" leave-to-class="opacity-0">
                     <p v-if="form.recentlySuccessful" class="mt-2 font-weight-medium text-success">Saved.</p>
                 </Transition>
