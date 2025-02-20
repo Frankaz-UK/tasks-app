@@ -26,14 +26,21 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
+        $maleOrFemale = fake()->randomElement(['Male', 'Female']);
+        $position = fake()->randomElement(['Manager', 'Developer', 'Assistant']);
+
         return [
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
+            'forename' => fake()->firstName($maleOrFemale),
+            'surname' => fake()->lastName($maleOrFemale),
+            'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
+            'position' => $position,
+            'gender' => $maleOrFemale,
+            'telephone' => fake()->phoneNumber(),
         ];
     }
 
