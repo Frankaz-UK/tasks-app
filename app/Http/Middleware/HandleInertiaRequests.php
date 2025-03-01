@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
             'appName' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
-                'full_name' => $request->user()->full_name,
+                'full_name' => $request->user()->full_name ?? null,
             ],
         ];
     }

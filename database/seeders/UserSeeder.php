@@ -18,9 +18,9 @@ class UserSeeder extends Seeder
     {
         // Create super admin user
         $user = User::create([
-            'forename' => 'Mr',
-            'surname' => 'Frankaz',
-            'email' => 'frankaz@tasks-app.co.uk',
+            'forename' => 'Phil',
+            'surname' => 'Franklin',
+            'email' => 'phil.franklin@tasks-app.co.uk',
             'telephone' => '01912345678',
             'gender' => 'male',
             'password' => bcrypt('password'),
