@@ -28,6 +28,7 @@ class TaskController extends Controller
                         ->where('name', 'like', '%' . $request->input('term') . '%');
                 },
             )
+            ->withOnly('user')
             ->orderBy('id')
             ->paginate($per_page);
 

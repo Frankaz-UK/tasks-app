@@ -50,6 +50,6 @@ class Task extends Model
      */
     function user(): HasOne
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
