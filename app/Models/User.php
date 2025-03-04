@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -74,5 +75,14 @@ class User extends Authenticatable
                 return ($this->forename . ' ' . $this->surname);
             },
         );
+    }
+
+    /**
+     * Get the tasks assigned to this user
+     * @return HasMany
+     */
+    function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 }
