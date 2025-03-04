@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskListRequest;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -12,19 +13,11 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param TaskListRequest $request
      * @return array
      */
-    public function index(Request $request): array
+    public function index(TaskListRequest $request): array
     {
-        $request->validate([
-            'per_page' => [
-                'int',
-                'max:100',
-                'min:15',
-            ],
-        ]);
-
         $per_page = $request->query('per_page', 15);
 
         $tasks = Task::query()
