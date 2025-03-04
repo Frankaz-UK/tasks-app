@@ -1,8 +1,9 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-12 mb-3">
+            <div class="col-12 mb-3" id="task-search">
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
+                <i class="fa fa-search fa-lg"></i>
             </div>
         </div>
         <b-table striped hover :items="items" :fields="fields">
@@ -12,6 +13,14 @@
                 </div>
                 <div v-else>
                     {{ data.item.name }}
+                </div>
+            </template>
+            <template #cell(user_id)="data">
+                <div v-if="data.item.user_id">
+                    {{ data.item.user.forename }} {{ data.item.user.surname }}
+                </div>
+                <div v-else>
+                    Not Assigned <!-- need to add functionality here to assign task to user) -->
                 </div>
             </template>
             <template #cell(complete)="data">
@@ -77,6 +86,10 @@ export default {
                 {
                     key: 'name',
                     label: 'Name',
+                },
+                {
+                    key: 'user_id',
+                    label: 'Assigned To',
                 },
                 {
                     key: 'complete',

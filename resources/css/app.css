@@ -5,3 +5,14 @@
     margin: 0 auto;
     max-width: 1320px;
 }
+
+#task-search {
+    position: relative
+}
+
+#task-search i {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: gray;
+}
