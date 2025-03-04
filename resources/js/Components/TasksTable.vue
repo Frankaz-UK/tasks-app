@@ -99,7 +99,7 @@ export default {
                 _query: {
                     page: this.current_page,
                     term: this.term,
-                    perpage: this.per_page,
+                    per_page: this.per_page,
                 },
             });
             axios.get(indexRoute)
