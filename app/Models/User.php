@@ -45,10 +45,6 @@ class User extends Authenticatable
         'roles',
     ];
 
-    protected $attributes = [
-        'full_name',
-    ];
-
     /**
      * Get the attributes that should be cast.
      *
