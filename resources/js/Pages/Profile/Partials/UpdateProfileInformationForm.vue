@@ -14,8 +14,12 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
-    name: user.name,
+    forename: user.forename,
+    surname: user.surname,
     email: user.email,
+    position: user.position,
+    telephone: user.telephone,
+    gender: user.gender,
 });
 </script>
 
@@ -28,17 +32,48 @@ const form = useForm({
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div class="mt-2 form-group row">
-                <label class="col-sm-2 col-form-label" for="name">Name</label>
+                <label class="col-sm-2 col-form-label" for="forename">Forename</label>
                 <div class="col-sm-10">
-                    <input class="form-control" id="name" type="text" v-model="form.name" required autofocus autocomplete="name" />
-                    <InputError class="mt-2" :message="form.errors.name" />
+                    <input class="form-control" id="forename" name="forename" type="text" v-model="form.forename" required autofocus autocomplete="forename" />
+                    <InputError class="mt-2" :message="form.errors.forename" />
+                </div>
+            </div>
+            <div class="mt-2 form-group row">
+                <label class="col-sm-2 col-form-label" for="surname">Surname</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="surname" name="surname" type="text" v-model="form.surname" required autofocus autocomplete="surname" />
+                    <InputError class="mt-2" :message="form.errors.surname" />
                 </div>
             </div>
             <div class="mt-2 form-group row">
                 <label class="col-sm-2 col-form-label" for="email">Email</label>
                 <div class="col-sm-10">
-                    <input class="form-control" id="email" type="email" v-model="form.email" required autocomplete="username" />
+                    <input class="form-control" id="email" name="email" type="email" v-model="form.email" required autocomplete="username" />
                     <InputError class="mt-2" :message="form.errors.email" />
+                </div>
+            </div>
+            <div class="mt-2 form-group row">
+                <label class="col-sm-2 col-form-label" for="position">Position</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="position" name="position" type="text" v-model="form.position" required autofocus autocomplete="position" />
+                    <InputError class="mt-2" :message="form.errors.position" />
+                </div>
+            </div>
+            <div class="mt-2 form-group row">
+                <label class="col-sm-2 col-form-label" for="telephone">Telephone</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="telephone" name="telephone" type="text" v-model="form.telephone" required autofocus autocomplete="telephone" />
+                    <InputError class="mt-2" :message="form.errors.telephone" />
+                </div>
+            </div>
+            <div class="mt-2 form-group row">
+                <label class="col-sm-2 col-form-label" for="gender">Gender</label>
+                <div class="col-sm-10">
+                    <select id="gender" name="gender" v-model="form.gender" class="form-select">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <InputError class="mt-2" :message="form.errors.gender" />
                 </div>
             </div>
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

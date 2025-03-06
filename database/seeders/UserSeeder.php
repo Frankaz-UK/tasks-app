@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'surname' => 'Franklin',
             'email' => 'phil.franklin@tasks-app.co.uk',
             'telephone' => '01912345678',
-            'gender' => 'male',
+            'gender' => 'Male',
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'position' => 'Director',
