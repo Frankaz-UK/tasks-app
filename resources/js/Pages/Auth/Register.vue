@@ -4,8 +4,12 @@ import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
-    name: '',
+    forename: '',
+    surname: '',
     email: '',
+    position: '',
+    telephone: '',
+    gender: '',
     password: '',
     password_confirmation: '',
 });
@@ -32,10 +36,17 @@ const submit = () => {
                             </header>
                             <form @submit.prevent="submit">
                                 <div class="mt-2 form-group row">
-                                    <label class="col-sm-2 col-form-label" for="name">Name</label>
+                                    <label class="col-sm-2 col-form-label" for="forename">Forename</label>
                                     <div class="col-sm-10">
-                                        <input id="name" type="text" class="form-control" v-model="form.name" autofocus autocomplete="name" />
-                                        <InputError class="mt-2" :message="form.errors.name" />
+                                        <input id="forename" name="forename" type="text" class="form-control" v-model="form.forename" autofocus autocomplete="forename" />
+                                        <InputError class="mt-2" :message="form.errors.forename" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 form-group row">
+                                    <label class="col-sm-2 col-form-label" for="forename">Surname</label>
+                                    <div class="col-sm-10">
+                                        <input id="surname" name="surname" type="text" class="form-control" v-model="form.surname" autofocus autocomplete="surname" />
+                                        <InputError class="mt-2" :message="form.errors.surname" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
@@ -43,6 +54,30 @@ const submit = () => {
                                     <div class="col-sm-10">
                                         <input id="email" type="email" class="form-control" v-model="form.email" autocomplete="username" />
                                         <InputError class="mt-2" :message="form.errors.email" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 form-group row">
+                                    <label class="col-sm-2 col-form-label" for="position">Position</label>
+                                    <div class="col-sm-10">
+                                        <input id="position" name="position" type="text" class="form-control" v-model="form.position" autofocus autocomplete="position" />
+                                        <InputError class="mt-2" :message="form.errors.position" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 form-group row">
+                                    <label class="col-sm-2 col-form-label" for="telephone">Telephone</label>
+                                    <div class="col-sm-10">
+                                        <input id="telephone" name="telephone" type="text" class="form-control" v-model="form.telephone" autofocus autocomplete="telephone" />
+                                        <InputError class="mt-2" :message="form.errors.telephone" />
+                                    </div>
+                                </div>
+                                <div class="mt-2 form-group row">
+                                    <label class="col-sm-2 col-form-label" for="gender">Gender</label>
+                                    <div class="col-sm-10">
+                                        <select id="gender" name="gender" v-model="form.gender" class="form-select">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                        <InputError class="mt-2" :message="form.errors.gender" />
                                     </div>
                                 </div>
                                 <div class="mt-2 form-group row">
