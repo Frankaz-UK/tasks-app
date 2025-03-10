@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class TaskController extends Controller
 {
@@ -34,7 +35,7 @@ class TaskController extends Controller
                 ->withOnly('user')
                 ->orderBy('id')
                 ->paginate($per_page);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
             ],
@@ -59,6 +60,7 @@ class TaskController extends Controller
      */
     public function store(Request $request, Task $task): array
     {
+        // need to add description field to tasks, create new validation request, and save assigned to too
         $request->validate([
             'name' => [
                 'string',
@@ -81,7 +83,30 @@ class TaskController extends Controller
     public function update(Task $task): JsonResponse
     {
         return response()->json([
-            'message' => 'Your requested data is : ' . $request->full_name
+            'message' => 'Your requested data is : ',
+        ]); // need to create form to update name, description and assigned user
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Task $task
+     * @return JsonResponse
+     */
+    public function destroy(Task $task): JsonResponse
+    {
+        try {
+            $task->delete();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json([
+            'message' => 'Task successfully deleted',
         ]);
     }
 
@@ -89,24 +114,23 @@ class TaskController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Task $task
-     * @return array
+     * @return JsonResponse
      */
-    public function destroy(Task $task): array
+    public function changeStatus(Task $task): JsonResponse
     {
-        $task->delete();
-        return [];
-    }
+        try {
+            $status = $task->getCompleteStatus();
+            $status ? $task->unSetComplete() : $task->setComplete();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Task $task
-     * @return array
-     */
-    public function changeStatus(Task $task): array
-    {
-        $status = $task->getCompleteStatus();
-        $status ? $task->unSetComplete() : $task->setComplete();
-        return [];
+        return response()->json([
+            'message' => 'Task status successfully changed',
+        ]);
     }
 }
