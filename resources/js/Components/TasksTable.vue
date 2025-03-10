@@ -29,7 +29,7 @@
                         complete action
                     </div>
                     <div class="col-5 me-2">
-                        <form method="post" name="update-task-{{ data.item.id }}" id="update-task-{{ data.item.id }}" :action="fetchRoute('tasks.api.update', {task: data.item.id})" class="col-6">
+                        <form method="post" name="update-task-{{ data.item.id }}-status" id="update-task-{{ data.item.id }}-status" :action="fetchRoute('tasks.api.status', {task: data.item.id})" class="col-6">
                             <input type="hidden" name="_token" :value="csrf">
                             <input type="hidden" name="_method" value="patch">
                             <button v-if="!data.item.complete" type="submit" class="btn btn-success"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /></button>
@@ -122,11 +122,19 @@ export default {
                     this.last_page = data.results.last_page;
                     this.total_rows = data.results.total;
                     this.per_page = data.results.per_page;
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
                 });
         },
         fetchRoute(routename, param) {
             return route(routename, param);
-        }
+        },
     },
 }
 </script>

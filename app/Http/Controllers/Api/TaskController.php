@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskListRequest;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
@@ -14,30 +16,38 @@ class TaskController extends Controller
      * Display a listing of the resource.
      *
      * @param TaskListRequest $request
-     * @return array
+     * @return JsonResponse
      */
-    public function index(TaskListRequest $request): array
+    public function index(TaskListRequest $request): JsonResponse
     {
-        $per_page = $request->query('per_page', 15);
+        try {
+            $per_page = $request->query('per_page', 15);
 
-        $tasks = Task::query()
-            ->when(
-                ! empty($request->filled('term')),
-                function (Builder $query) use ($request): void {
-                    $query
-                        ->where('name', 'like', '%' . $request->input('term') . '%');
-                },
-            )
-            ->withOnly('user')
-            ->orderBy('id')
-            ->paginate($per_page);
+            $tasks = Task::query()
+                ->when(
+                    !empty($request->filled('term')),
+                    function (Builder $query) use ($request): void {
+                        $query
+                            ->where('name', 'like', '%' . $request->input('term') . '%');
+                    },
+                )
+                ->withOnly('user')
+                ->orderBy('id')
+                ->paginate($per_page);
+        } catch (\Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
-        return [
+        return response()->json([
             'results' => $tasks,
             'pagination' => [
                 'more' => $tasks->hasMorePages(),
             ],
-        ];
+        ]);
     }
 
     /**
@@ -66,13 +76,13 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param Task $task
-     * @return array
+     * @return JsonResponse
      */
-    public function update(Task $task): array
+    public function update(Task $task): JsonResponse
     {
-        $status = $task->getCompleteStatus();
-        $status ? $task->unSetComplete() : $task->setComplete();
-        return [];
+        return response()->json([
+            'message' => 'Your requested data is : ' . $request->full_name
+        ]);
     }
 
     /**
@@ -84,6 +94,19 @@ class TaskController extends Controller
     public function destroy(Task $task): array
     {
         $task->delete();
+        return [];
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Task $task
+     * @return array
+     */
+    public function changeStatus(Task $task): array
+    {
+        $status = $task->getCompleteStatus();
+        $status ? $task->unSetComplete() : $task->setComplete();
         return [];
     }
 }
