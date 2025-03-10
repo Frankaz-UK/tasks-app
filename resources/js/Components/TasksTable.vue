@@ -29,19 +29,11 @@
                         complete action
                     </div>
                     <div class="col-5 me-2">
-                        <form method="post" name="update-task-{{ data.item.id }}-status" id="update-task-{{ data.item.id }}-status" :action="fetchRoute('tasks.api.status', {task: data.item.id})" class="col-6">
-                            <input type="hidden" name="_token" :value="csrf">
-                            <input type="hidden" name="_method" value="patch">
-                            <button v-if="!data.item.complete" type="submit" class="btn btn-success"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /></button>
-                            <button v-else type="submit" class="btn btn-outline-info"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /></button>
-                        </form>
+                        <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /></button>
+                        <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /></button>
                     </div>
                     <div v-if="!data.item.complete" class="col-5 me2">
-                        <form method="post" name="delete-task-{{ data.item.id }}" id="delete-task-{{ data.item.id }}" :action="fetchRoute('tasks.api.destroy', {task: data.item.id})" class="col-6">
-                            <input type="hidden" name="_token" :value="csrf">
-                            <input type="hidden" name="_method" value="delete">
-                            <button type="submit" class="btn btn-danger"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /></button>
-                        </form>
+                        <button type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /></button>
                     </div>
                 </div>
             </template>
@@ -115,6 +107,7 @@ export default {
                     per_page: this.per_page,
                 },
             });
+
             axios.get(indexRoute)
                 .then(({data}) => {
                     this.items = data.results.data;
@@ -122,6 +115,10 @@ export default {
                     this.last_page = data.results.last_page;
                     this.total_rows = data.results.total;
                     this.per_page = data.results.per_page;
+
+                    if (this.items.length == 0 && this.last_page > 1) {
+                        this.fetchData(this.current_page - 1);
+                    }
                 })
                 .catch(error => {
                     this.$toast.open({
@@ -134,6 +131,54 @@ export default {
         },
         fetchRoute(routename, param) {
             return route(routename, param);
+        },
+        changeTaskStatus(taskId) {
+            axios.post(route('tasks.api.status', {task: taskId}), {
+                _token : this.csrf,
+                _method: 'patch',
+            })
+                .then(({data}) => {
+                    this.$toast.open({
+                        message: data.message,
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top',
+                    });
+
+                    this.fetchData();
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
+        },
+        deleteTask(taskId) {
+            axios.post(route('tasks.api.destroy', {task: taskId}), {
+                _token : this.csrf,
+                _method: 'delete',
+            })
+                .then(({data}) => {
+                    this.$toast.open({
+                        message: data.message,
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top',
+                    });
+
+                    this.fetchData();
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
         },
     },
 }
