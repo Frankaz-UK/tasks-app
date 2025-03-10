@@ -25,6 +25,7 @@
         "bootstrap-vue-next": "^0.26.28",
         "flowbite": "^3.1.1",
         "flowbite-vue": "^0.1.7",
-        "postcss": "^8.5.1"
+        "postcss": "^8.5.1",
+        "vue-toast-notification": "^3.1.3"
     }
 }

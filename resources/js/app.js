@@ -10,13 +10,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { createBootstrap } from 'bootstrap-vue-next';
+import ToastPlugin from 'vue-toast-notification';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 library.add(fas);
 
 const app = createApp({}).component('font-awesome-icon', FontAwesomeIcon);
-app.use(createBootstrap());
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -30,6 +30,8 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(createBootstrap())
+            .use(ToastPlugin)
             .mount(el);
     },
     progress: {
