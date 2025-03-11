@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Titles;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -29,16 +30,16 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $maleOrFemale = fake()->randomElement(['Male', 'Female']);
-        $position = fake()->randomElement(['Manager', 'Developer', 'Assistant']);
 
         return [
+            'title' => $maleOrFemale === 'Male' ? Titles::MR : Titles::MRS,
             'forename' => fake()->firstName($maleOrFemale),
             'surname' => fake()->lastName($maleOrFemale),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
-            'position' => $position,
+            'position' => fake()->jobTitle(),
             'gender' => $maleOrFemale,
             'telephone' => fake()->phoneNumber(),
         ];

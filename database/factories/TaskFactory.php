@@ -20,8 +20,9 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->text(),
+            'name' => fake()->sentence(),
             'complete' => (bool)random_int(0, 1),
+            'description' => fake()->text(),
         ];
     }
 }
