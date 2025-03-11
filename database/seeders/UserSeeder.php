@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Titles;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,6 +20,7 @@ class UserSeeder extends Seeder
     {
         // Create super admin user
         $user = User::create([
+            'title' => Titles::MR,
             'forename' => 'Phil',
             'surname' => 'Franklin',
             'email' => 'phil.franklin@tasks-app.co.uk',

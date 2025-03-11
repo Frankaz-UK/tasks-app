@@ -13,7 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', static function (Blueprint $table): void {
-            $table->enum('title', array_column(Titles::cases(), 'value'))->default(Titles::MX->value);
+            $table
+                ->enum('title', array_column(Titles::cases(), 'value'))
+                ->default(Titles::MX->value)
+                ->after('id');
         });
     }
 
