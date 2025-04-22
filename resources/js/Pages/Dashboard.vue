@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from "@inertiajs/vue3";
 import TasksTable from "@/Components/TasksTable.vue";
+import UsersBarChart from "@/Components/UsersBarChart.vue";
 </script>
 
 <template>
@@ -12,8 +13,8 @@ import TasksTable from "@/Components/TasksTable.vue";
             <div class="container">
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
-                        You're logged in!
-                        <!-- add graphs here -->
+                        <h2>Users Tasks Overview</h2>
+                        <UsersBarChart></UsersBarChart>
                     </div>
                 </div>
             </div>
