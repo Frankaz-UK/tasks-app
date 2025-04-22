@@ -31,6 +31,7 @@ defineProps({
                         <div class="d-inline-flex gap-2">
                             <BDropdown :text="$page.props.auth.full_name" variant="primary">
                                 <BDropdownItem :active="location === route('dashboard')" :href="route('dashboard')">Dashboard</BDropdownItem>
+                                <BDropdownItem :active="location === route('tasks.index')" :href="route('tasks.index')">Tasks</BDropdownItem>
                                 <BDropdownItem :active="location === route('profile.edit')" :href="route('profile.edit')">Edit Profile</BDropdownItem>
                             </BDropdown>
                             <div><Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link></div>
