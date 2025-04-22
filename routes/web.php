@@ -16,7 +16,13 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('/dashboard')->name('dashboard.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('index');
+
+    Route::prefix('/api')->name('api.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\DashboardController::class, 'index'])->name('index');
+    });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,7 +40,6 @@ Route::prefix('/tasks')->name('tasks.')->group(function () {
         Route::patch('/{task}/status', [\App\Http\Controllers\Api\TaskController::class, 'changeStatus'])->name('status');
         Route::delete('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'destroy'])->name('destroy');
     });
-
 });
 
 require __DIR__.'/auth.php';

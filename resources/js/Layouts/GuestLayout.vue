@@ -41,7 +41,7 @@ function handleImageError() {
                         <div class="container">
                             <nav v-if="canLogin" class="text-end">
                                 <template v-if="$page.props.auth.user">
-                                    <Link :href="route('dashboard')" class="btn btn-primary">Dashboard</Link>
+                                    <Link :href="route('dashboard.index')" class="btn btn-primary">Dashboard</Link>
                                     <span class="p-2"> </span>
                                     <Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link>
                                 </template>
