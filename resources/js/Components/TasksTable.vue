@@ -129,9 +129,6 @@ export default {
                     });
                 });
         },
-        fetchRoute(routename, param) {
-            return route(routename, param);
-        },
         changeTaskStatus(taskId) {
             axios.post(route('tasks.api.status', {task: taskId}), {
                 _token : this.csrf,
