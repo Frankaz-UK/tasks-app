@@ -6,14 +6,14 @@ import TasksTable from "@/Components/TasksTable.vue";
 
 <template>
     <AuthenticatedLayout>
-        <Head title="Dashboard" />
+        <Head title="Tasks" />
 
         <div class="py-5">
             <div class="container">
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
-                        You're logged in!
-                        <!-- add graphs here -->
+                        Tasks
+                        <tasks-table></tasks-table>
                     </div>
                 </div>
             </div>

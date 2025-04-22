@@ -9,17 +9,17 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return \Inertia\Response
      */
-    public function index(): Factory|View|Application
+    public function index(): \Inertia\Response
     {
-        $tasks = Task::all();
-        return view('tasks.index', compact('tasks'));
+        return Inertia::render('Tasks/Tasks');
     }
 }
