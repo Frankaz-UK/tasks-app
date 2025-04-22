@@ -57,8 +57,8 @@ class DashboardController extends Controller
                         "label" => "Count",
                         "backgroundColor" => ['red', 'green', 'blue'],
                         "data" => $tasksPerUser->map(function (User $item) {
-                            return $item->tasks_count;
-                        }),
+                                return $item->tasks_count;
+                            }),
                         ],
                         [
                             "label" => "Complete",
