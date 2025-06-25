@@ -32,6 +32,13 @@ class TaskController extends Controller
                             ->where('name', 'like', '%' . $request->input('term') . '%');
                     },
                 )
+                ->when(
+                    !empty($request->filled('user')),
+                    function (Builder $query) use ($request): void {
+                        $query
+                            ->where('user_id', '=', $request->input('user'));
+                    },
+                )
                 ->withOnly('user')
                 ->orderBy('id')
                 ->paginate($per_page);

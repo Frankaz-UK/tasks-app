@@ -12,6 +12,7 @@ class TaskListRequest extends FormRequest
     {
         return [
             'term' => 'nullable|string|max:255',
+            'user' => 'nullable|int|exists:users,id',
             'per_page' => 'int|min:15|max:100',
         ];
     }
@@ -20,6 +21,8 @@ class TaskListRequest extends FormRequest
     {
         return [
             'term.max' => 'Please enter a term smaller than 255 characters',
+            'user.int' => 'User id must be an integer',
+            'user.exists' => 'User id must exist',
             'per_page.int' => 'Please enter a valid integer value for the page number.',
         ];
     }

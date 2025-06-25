@@ -1,9 +1,15 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-12 mb-3" id="task-search">
+            <div class="col-9 mb-3" id="task-search">
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
                 <i class="fa fa-search fa-lg"></i>
+            </div>
+            <div class="col-3">
+                <select @change="fetchData(1)" name="user" id="user" v-model="user" class="form-select">
+                    <option value="">Please Select...</option>
+                    <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
+                </select>
             </div>
         </div>
         <b-table striped hover :items="items" :fields="fields">
@@ -70,6 +76,8 @@ export default {
             per_page: 15,
             total_rows: 0,
             term: null,
+            user: null,
+            users: [],
             fields: [
                 {
                     key: 'id',
@@ -93,8 +101,25 @@ export default {
     },
     mounted() {
         this.fetchData();
+        this.fetchUsers();
     },
     methods: {
+        fetchUsers() {
+            let indexRoute = route('users.api.index');
+
+            axios.get(indexRoute)
+                .then(({data}) => {
+                    this.users = data.results;
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
+        },
         fetchData(page) {
             if (page) {
                 this.current_page = page;
@@ -104,6 +129,7 @@ export default {
                 _query: {
                     page: this.current_page,
                     term: this.term,
+                    user: this.user,
                     per_page: this.per_page,
                 },
             });
