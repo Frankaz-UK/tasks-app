@@ -28,7 +28,7 @@ class UserController extends Controller
                     'id'
                 )
                 ->without('roles')
-                ->orderBy('id')
+                ->orderBy('fullname')
                 ->get();
         } catch (Throwable $exception) {
             return response()->json([
