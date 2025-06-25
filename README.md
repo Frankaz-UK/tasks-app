@@ -7,11 +7,13 @@
 - Node
 - NPM
 
+**1. Open the repository folder in your terminal**
+
 run `composer install`
 
 run `npm install`
 
-**Copy and paste the following into a new file and save as .env:**
+**2. Copy and paste the following into a new file and save as .env in the repository folder:**
 ##
     APP_NAME="Tasks App"
     APP_ENV=local
@@ -78,7 +80,8 @@ run `npm install`
     AWS_USE_PATH_STYLE_ENDPOINT=false
 
     VITE_APP_NAME="${APP_NAME}"
-**You will need three tabs open in your terminal for the following section:**
+
+**3. You will need three tabs open in your terminal in the repositories folder for the following section:**
 
 run `./vendor/bin/sail up`
 
@@ -87,3 +90,5 @@ run `npm run dev`
 run `./vendor/bin/sail artisan migrate:fresh --seed` (adds entries to the database for users with roles and tasks)
 
 Navigate to http://localhost
+
+Logins can be found in the users table, all passwords are **password**.
