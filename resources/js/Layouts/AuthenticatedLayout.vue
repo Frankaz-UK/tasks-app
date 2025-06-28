@@ -1,9 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { BDropdown, BDropdownItem } from "bootstrap-vue-next";
+import { usePage } from '@inertiajs/vue3';
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-
-const location = defineModel({ default: window.location.href, type: String });
 
 defineProps({
     laravelVersion: {
@@ -15,6 +13,14 @@ defineProps({
         required: false,
     },
 });
+
+const page = usePage();
+
+function routeCheck(url) {
+    return url.includes(page.url);
+}
+
+console.log(route('dashboard.index'));
 </script>
 
 <template>
@@ -22,19 +28,22 @@ defineProps({
         <header class="shadow">
             <div class="header-div">
                 <div class="row pt-2 pb-2">
-                    <div class="col-6">
+                    <div class="col-10">
                         <div class="d-inline-flex gap-2">
                             <Link :href="route('home')"><ApplicationLogo class="d-inline-block"/></Link>
                         </div>
-                    </div>
-                    <div class="col-6 text-end">
                         <div class="d-inline-flex gap-2">
-                            <BDropdown :text="$page.props.auth.full_name" variant="primary">
-                                <BDropdownItem :active="location === route('dashboard.index')" :href="route('dashboard.index')">Dashboard</BDropdownItem>
-                                <BDropdownItem :active="location === route('tasks.index')" :href="route('tasks.index')">Tasks</BDropdownItem>
-                                <BDropdownItem :active="location === route('profile.edit')" :href="route('profile.edit')">Edit Profile</BDropdownItem>
-                            </BDropdown>
-                            <div><Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link></div>
+                            &nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div class="d-inline-flex gap-2">
+                            <div><Link :href="route('dashboard.index')" class="btn" :class="routeCheck(route('dashboard.index')) ? 'btn-outline-primary' : 'btn-primary'">Dashboard</Link></div>
+                            <div><Link :href="route('tasks.index')" class="btn" :class="routeCheck(route('tasks.index')) ? 'btn-outline-primary' : 'btn-primary'">Tasks</Link></div>
+                            <div><Link :href="route('profile.edit')" class="btn" :class="routeCheck(route('profile.edit')) ? 'btn-outline-primary' : 'btn-primary'">Edit Profile</Link></div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="d-inline-flex gap-2 pt-4">
+                            <div ><Link :href="route('logout')" method="post" class="btn btn-secondary">Log Out</Link></div>
                         </div>
                     </div>
                 </div>

@@ -113,7 +113,7 @@ export default {
                 })
                 .catch(error => {
                     this.$toast.open({
-                        message: error.response.data.message,
+                        message: error.response ? error.response.data.message : error,
                         type: 'error',
                         duration: 5000,
                         position: 'top',
