@@ -7,9 +7,27 @@
             </div>
             <div class="col-3">
                 <select @change="fetchData(1)" name="user" id="user" v-model="user" class="form-select">
-                    <option value="">Please Select...</option>
+                    <option value="">Select User...</option>
                     <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
                 </select>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" @click="confirmUserDeletion">Add Task</button>
+                <BModal v-model="confirmingUserDeletion" title="Delete Account" @hide="closeModal" size="xl">
+                    <div class="p-4">
+                        <h2 class="h5 font-weight-medium text-dark">Are you sure you want to delete your account?</h2>
+                        <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.</p>
+                        <div class="form-group row mt-4">
+                            <label class="col-sm-2 col-form-label" for="password">Password</label>
+                            <div class="col-sm-10">
+                                <input id="password" v-model="form.password" type="password" class="form-control" placeholder="Password" @keyup.enter="deleteUser" />
+                                <InputError :message="form.errors.password" class="mt-2" />
+                            </div>
+                        </div>
+                    </div>
+                    <template #cancel><button class="btn btn-outline-warning ms-3" @click="closeModal">Cancel</button></template>
+                    <template #ok><button class="btn btn-outline-danger ms-3" :disabled="form.processing" @click="deleteUser">Delete Account</button></template>
+                </BModal>
             </div>
         </div>
         <b-table striped hover :items="items" :fields="fields">
@@ -63,11 +81,14 @@
 
 <script>
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import { BTable, BPagination } from "bootstrap-vue-next";
+import {BTable, BPagination, BModal} from "bootstrap-vue-next";
+import InputError from "@/Components/InputError.vue";
+import {nextTick, ref} from "vue";
+import {useForm} from "@inertiajs/vue3";
 
 export default {
     name: 'Tasks Table',
-    components: { FontAwesomeIcon, BPagination, BTable },
+    components: {InputError, BModal, FontAwesomeIcon, BPagination, BTable },
     data() {
         return {
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -76,8 +97,12 @@ export default {
             per_page: 15,
             total_rows: 0,
             term: null,
-            user: null,
+            user: '',
             users: [],
+            form: useForm({
+                password: '',
+            }),
+            confirmingUserDeletion: false,
             fields: [
                 {
                     key: 'id',
@@ -202,6 +227,27 @@ export default {
                         position: 'top',
                     });
                 });
+        },
+        closeModal() {
+            this.confirmingUserDeletion = false;
+            /*this.form.clearErrors();
+            this.form.reset();*/
+        },
+        confirmUserDeletion() {
+            this.confirmingUserDeletion = true;
+
+            nextTick(() => password.focus());
+        },
+        deleteUser() {
+            /*
+            form.delete(route('profile.destroy'), {
+                preserveScroll: true,
+                onSuccess: () => closeModal(),
+                onError: () => passwordInput.value.focus(),
+                onFinish: () => form.reset(),
+            });
+            */
+            this.closeModal();
         },
     },
 }
