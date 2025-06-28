@@ -19,8 +19,6 @@ const page = usePage();
 function routeCheck(url) {
     return url.includes(page.url);
 }
-
-console.log(route('dashboard.index'));
 </script>
 
 <template>
