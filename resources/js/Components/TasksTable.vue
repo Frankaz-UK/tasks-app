@@ -12,21 +12,34 @@
                 </select>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" @click="confirmUserDeletion">Add Task</button>
-                <BModal v-model="confirmingUserDeletion" title="Delete Account" @hide="closeModal" size="xl">
-                    <div class="p-4">
-                        <h2 class="h5 font-weight-medium text-dark">Are you sure you want to delete your account?</h2>
-                        <p class="mt-1 text-muted">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.</p>
-                        <div class="form-group row mt-4">
-                            <label class="col-sm-2 col-form-label" for="password">Password</label>
-                            <div class="col-sm-10">
-                                <input id="password" v-model="form.password" type="password" class="form-control" placeholder="Password" @keyup.enter="deleteUser" />
-                                <InputError :message="form.errors.password" class="mt-2" />
-                            </div>
+                <button class="btn btn-primary" @click="addTask">Add New Task</button>
+                <BModal v-model="addTaskModal" title="Add New Task" @hide="closeAddTask" size="xl">
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Task name" ref="task_name" id="name" name="name" v-model="form.name" />
+                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
-                    <template #cancel><button class="btn btn-outline-warning ms-3" @click="closeModal">Cancel</button></template>
-                    <template #ok><button class="btn btn-outline-danger ms-3" :disabled="form.processing" @click="deleteUser">Delete Account</button></template>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
+                        <div class="col-sm-10">
+                            <textarea rows="10" class="form-control" type="text" placeholder="Task description" id="description" name="description" v-model="form.description"></textarea>
+                            <InputError :message="form.errors.name" class="mt-2" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="user_id">User:</label>
+                        <div class="col-sm-10">
+                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select">
+                                <option value="" selected>Select User...</option>
+                                <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
+                            </select>
+                            <InputError :message="form.errors.user_id" class="mt-2" />
+                        </div>
+                    </div>
+                    <template #cancel><button class="btn btn-danger ms-3" @click="closeAddTask">Cancel</button></template>
+                    <template #ok><button class="btn btn-primary ms-3" :disabled="form.processing" @click="saveTask">Submit</button></template>
                 </BModal>
             </div>
         </div>
@@ -53,11 +66,11 @@
                         complete action
                     </div>
                     <div class="col-5 me-2">
-                        <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /></button>
-                        <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /></button>
+                        <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /> Mark Complete</button>
+                        <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
                     </div>
                     <div v-if="!data.item.complete" class="col-5 me2">
-                        <button type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /></button>
+                        <button type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete Task</button>
                     </div>
                 </div>
             </template>
@@ -83,7 +96,6 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {BTable, BPagination, BModal} from "bootstrap-vue-next";
 import InputError from "@/Components/InputError.vue";
-import {nextTick, ref} from "vue";
 import {useForm} from "@inertiajs/vue3";
 
 export default {
@@ -100,9 +112,11 @@ export default {
             user: '',
             users: [],
             form: useForm({
-                password: '',
+                name: '',
+                description: '',
+                user_id: '',
             }),
-            confirmingUserDeletion: false,
+            addTaskModal: false,
             fields: [
                 {
                     key: 'id',
@@ -111,6 +125,12 @@ export default {
                 {
                     key: 'name',
                     label: 'Name',
+                },
+                {
+                    key: 'description',
+                    label: 'Description',
+                    thStyle: { width: "20%" },
+                    tdStyle: { width: "20%" },
                 },
                 {
                     key: 'user_id',
@@ -228,26 +248,72 @@ export default {
                     });
                 });
         },
-        closeModal() {
-            this.confirmingUserDeletion = false;
-            /*this.form.clearErrors();
-            this.form.reset();*/
+        closeAddTask() {
+            this.addTaskModal = false;
+            this.form.clearErrors();
+            this.form.reset();
         },
-        confirmUserDeletion() {
-            this.confirmingUserDeletion = true;
+        addTask() {
+            this.addTaskModal = true;
+        },
+        saveTask() {
+            axios.post(route('tasks.api.store', {
+                // may be used if same method for task update, however might need to prepare above then no problems with route etc.
+            }), {
+                name: this.form.name,
+                description: this.form.description,
+                user_id: this.form.user_id,
+                _token : this.csrf,
+                _method: 'post',
+            })
+                .then(({data}) => {
+                    this.$toast.open({
+                        message: data.message,
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top',
+                    });
 
-            nextTick(() => password.focus());
+                    this.fetchData();
+                    this.closeAddTask();
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
         },
-        deleteUser() {
-            /*
-            form.delete(route('profile.destroy'), {
-                preserveScroll: true,
-                onSuccess: () => closeModal(),
-                onError: () => passwordInput.value.focus(),
-                onFinish: () => form.reset(),
-            });
-            */
-            this.closeModal();
+        updateTask() { // not implemented yet, requires new modal? or just change route and method (can use another model to store the task id)?
+            axios.post(route('tasks.api.update', {
+                name: this.form.name,
+                description: this.form.description,
+                user_id: this.user
+            }), {
+                _token : this.csrf,
+                _method: 'patch',
+            })
+                .then(({data}) => {
+                    this.$toast.open({
+                        message: data.message,
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top',
+                    });
+
+                    this.fetchData();
+                    this.closeAddTask();
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
         },
     },
 }

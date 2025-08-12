@@ -16,7 +16,7 @@ class Task extends Model
     /**
      * @var string[]
      */
-    protected $fillable = ['name', 'complete'];
+    protected $fillable = ['name', 'description', 'complete', 'user_id'];
 
     /**
      * @return bool

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskListRequest;
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -61,37 +62,55 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage. (note: Task $task creates a new instance of Task model)
      *
-     * @param Request $request
+     * @param TaskRequest $request
      * @param Task $task
-     * @return array
+     * @return JsonResponse
      */
-    public function store(Request $request, Task $task): array
+    public function store(TaskRequest $request, Task $task): JsonResponse
     {
-        // need to add description field to tasks, create new validation request, and save assigned to too
-        $request->validate([
-            'name' => [
-                'string',
-                'max:255',
-                'min:15',
+        try {
+            $task->name = $request->input('name');
+            $task->description = $request->input('description');
+            $task->user_id = $request->input('user_id');
+            $task->save();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
             ],
-        ]);
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
 
-        $task->name = $request->input('name');
-        $task->save();
-        return [];
+        return response()->json([
+            'message' => 'Task successfully added',
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Task $task
+     * @param TaskRequest $request
      * @return JsonResponse
      */
-    public function update(Task $task): JsonResponse
+    public function update(Task $task, TaskRequest $request): JsonResponse
     {
+        try {
+            $task->name = $request->input('name');
+            $task->description = $request->input('description');
+            $task->user_id = $request->input('user_id');
+            $task->save();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         return response()->json([
-            'message' => 'Your requested data is : ',
-        ]); // need to create form to update name, description and assigned user
+            'message' => 'Task successfully updated',
+        ]);
     }
 
     /**
