@@ -37,6 +37,9 @@ class DashboardController extends Controller
                 'tasksCompleted' => Task::query()
                     ->where('complete', 1)
                     ->count(),
+                'tasksUnassigned' => Task::query()
+                    ->where('user_id', null)
+                    ->count(),
             ];
         } catch (Throwable $exception) {
             return response()->json([
