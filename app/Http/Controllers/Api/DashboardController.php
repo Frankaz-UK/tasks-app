@@ -22,7 +22,7 @@ class DashboardController extends Controller
         try {
             $tasksPerUser =
                 User::query()
-                    ->select('id', 'forename', 'surname')
+                    ->select(['id', 'forename', 'surname'])
                     ->withCount('tasks')
                     ->withCount([
                         'tasks as completed_tasks_count' => function ($query) {

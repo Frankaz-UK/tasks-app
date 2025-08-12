@@ -1,5 +1,9 @@
 <template>
     <div class="container">
+        <div class="row">
+            <div class="col-md-6">Total Tasks: {{ tasksCount.tasks }}</div>
+            <div class="col-md-6">Total Completed Tasks: {{ tasksCount.tasksCompleted }}</div>
+        </div>
         <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
     </div>
 </template>
@@ -16,6 +20,7 @@ export default {
     data: () => ({
         loaded: false,
         chartData: null,
+        tasksCount: null,
         chartOptions: {
             responsive: true,
             plugins: {
@@ -30,8 +35,8 @@ export default {
 
         try {
             const userlist = await axios.get(route('dashboard.api.index'));
-            console.log(userlist.data.results.tasksPerUser);
             this.chartData = userlist.data.results.tasksPerUser;
+            this.tasksCount = userlist.data.results.tasksCount;
             this.loaded = true;
         } catch (e) {
             console.error(e);
