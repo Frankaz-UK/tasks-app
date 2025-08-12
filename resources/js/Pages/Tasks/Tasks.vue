@@ -12,7 +12,7 @@ import TasksTable from "@/Components/TasksTable.vue";
             <div class="container">
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
-                        Tasks
+                        <h2>Tasks</h2>
                         <tasks-table></tasks-table>
                     </div>
                 </div>
