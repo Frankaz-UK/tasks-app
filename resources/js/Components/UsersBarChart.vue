@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">Total Tasks: {{ loaded ? tasksCount.tasks : 0 }}</div>
-            <div class="col-md-3">Total Completed Tasks: {{ loaded ? tasksCount.tasksCompleted : 0 }}</div>
-            <div class="col-md-3">Total Incomplete Tasks: {{ loaded ? (tasksCount.tasks - tasksCount.tasksCompleted) : 0 }}</div>
-            <div class="col-md-3">Total Unassigned Tasks: {{ loaded ? tasksCount.tasksUnassigned : 0 }}</div>
+            <div class="col-md-3">Total Tasks: <b class="text-primary">{{ loaded ? tasksCount.tasks : 0 }}</b></div>
+            <div class="col-md-3">Total Completed Tasks: <b class="text-success">{{ loaded ? tasksCount.tasksCompleted : 0 }}</b></div>
+            <div class="col-md-3">Total Incomplete Tasks: <b class="text-danger">{{ loaded ? (tasksCount.tasks - tasksCount.tasksCompleted) : 0 }}</b></div>
+            <div class="col-md-3">Total Unassigned Tasks: <b class="text-warning">{{ loaded ? tasksCount.tasksUnassigned : 0 }}</b></div>
         </div>
         <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
     </div>
