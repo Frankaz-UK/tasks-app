@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-6">Total Tasks: {{ tasksCount.tasks }}</div>
-            <div class="col-md-6">Total Completed Tasks: {{ tasksCount.tasksCompleted }}</div>
+            <div class="col-md-6">Total Tasks: {{ loaded ? tasksCount.tasks : 0 }}</div>
+            <div class="col-md-6">Total Completed Tasks: {{ loaded ? tasksCount.tasksCompleted : 0 }}</div>
         </div>
         <Bar v-if="loaded" :data="chartData" :options="chartOptions" />
     </div>
