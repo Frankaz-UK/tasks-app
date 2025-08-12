@@ -125,6 +125,8 @@ export default {
                 {
                     key: 'name',
                     label: 'Name',
+                    thStyle: { width: "15%" },
+                    tdStyle: { width: "15%" },
                 },
                 {
                     key: 'description',
