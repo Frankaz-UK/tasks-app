@@ -13,7 +13,7 @@
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" @click="addTask">Add New Task</button>
-                <BModal v-model="addTaskModal" title="Add New Task" @hide="closeAddTask" size="xl">
+                <BModal v-model="addTaskModal" :title="(task_id == null ? 'Add New' : 'Edit') + ' Task'" @hide="closeAddTask" size="xl">
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
@@ -62,14 +62,12 @@
             </template>
             <template #cell(complete)="data">
                 <div class="row">
-                    <div style="visibility: hidden">
-                        complete action
-                    </div>
-                    <div class="col-5 me-2">
+                    <div class="col-4 me-2">
                         <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /> Mark Complete</button>
                         <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
                     </div>
-                    <div v-if="!data.item.complete" class="col-5 me2">
+                    <div v-if="!data.item.complete" class="col-7 me2">
+                        <button type="button" class="btn btn-primary" @click="editTask(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit Task</button>&nbsp;
                         <button type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete Task</button>
                     </div>
                 </div>
@@ -116,6 +114,7 @@ export default {
                 description: '',
                 user_id: '',
             }),
+            task_id: null,
             addTaskModal: false,
             fields: [
                 {
@@ -254,48 +253,29 @@ export default {
             this.addTaskModal = false;
             this.form.clearErrors();
             this.form.reset();
+            this.task_id = null;
         },
         addTask() {
             this.addTaskModal = true;
         },
+        editTask(task) {
+            this.task_id = task.id;
+            this.form.name = task.name;
+            this.form.description = task.description;
+            this.form.user_id = task.user_id;
+            this.addTask();
+        },
         saveTask() {
-            axios.post(route('tasks.api.store', {
-                // may be used if same method for task update, however might need to prepare above then no problems with route etc.
-            }), {
+            let api_route = (this.task_id == null) ? 'tasks.api.store' : 'tasks.api.update';
+            let params = (this.task_id == null) ? {} : { task: this.task_id };
+            let method = (this.task_id == null) ? 'post' : 'patch';
+
+            axios.post(route(api_route, params), {
                 name: this.form.name,
                 description: this.form.description,
                 user_id: this.form.user_id,
                 _token : this.csrf,
-                _method: 'post',
-            })
-                .then(({data}) => {
-                    this.$toast.open({
-                        message: data.message,
-                        type: 'success',
-                        duration: 5000,
-                        position: 'top',
-                    });
-
-                    this.fetchData();
-                    this.closeAddTask();
-                })
-                .catch(error => {
-                    this.$toast.open({
-                        message: error.response.data.message,
-                        type: 'error',
-                        duration: 5000,
-                        position: 'top',
-                    });
-                });
-        },
-        updateTask() { // not implemented yet, requires new modal? or just change route and method (can use another model to store the task id)?
-            axios.post(route('tasks.api.update', {
-                name: this.form.name,
-                description: this.form.description,
-                user_id: this.user
-            }), {
-                _token : this.csrf,
-                _method: 'patch',
+                _method: method,
             })
                 .then(({data}) => {
                     this.$toast.open({
