@@ -53,11 +53,11 @@
                 </div>
             </template>
             <template #cell(user_id)="data">
-                <div v-if="data.item.user_id">
-                    {{ data.item.user.forename }} {{ data.item.user.surname }}
-                </div>
-                <div v-else>
-                    Not Assigned <!-- need to add functionality here to assign task to user) -->
+                <div>
+                    <select @change="changeTaskUser(data.item)" name="user" id="user" v-model="data.item.user_id" class="form-select">
+                        <option :value="null">Not Assigned</option>
+                        <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
+                    </select>
                 </div>
             </template>
             <template #cell(complete)="data">
@@ -205,6 +205,31 @@ export default {
             axios.post(route('tasks.api.status', {task: taskId}), {
                 _token : this.csrf,
                 _method: 'patch',
+            })
+                .then(({data}) => {
+                    this.$toast.open({
+                        message: data.message,
+                        type: 'success',
+                        duration: 5000,
+                        position: 'top',
+                    });
+
+                    this.fetchData();
+                })
+                .catch(error => {
+                    this.$toast.open({
+                        message: error.response.data.message,
+                        type: 'error',
+                        duration: 5000,
+                        position: 'top',
+                    });
+                });
+        },
+        changeTaskUser(task) {
+            axios.post(route('tasks.api.user', {task: task.id}), {
+                _token : this.csrf,
+                _method: 'patch',
+                user_id : task.user_id,
             })
                 .then(({data}) => {
                     this.$toast.open({

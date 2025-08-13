@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskListRequest;
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\TaskUserRequest;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -157,6 +158,30 @@ class TaskController extends Controller
 
         return response()->json([
             'message' => 'Task status successfully changed',
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Task $task
+     * @return JsonResponse
+     */
+    public function changeUser(Task $task, TaskUserRequest $request): JsonResponse
+    {
+        try {
+            $task->user_id = $request->input('user_id');
+            $task->save();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json([
+            'message' => 'Task user successfully changed',
         ]);
     }
 }
