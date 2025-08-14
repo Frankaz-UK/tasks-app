@@ -3,7 +3,7 @@
 **The following steps require this software to be installed on your machine:**
 - [PHP 8 (or higher)](https://www.php.net/manual/en/install.php)
 - [Composer](https://getcomposer.org/download/)
-- [Docker](https://docs.docker.com/compose/install/)
+- [Docker with Docker Compose](https://docs.docker.com/compose/install/)
 - [Node](https://nodejs.org/en/download)
 - [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
