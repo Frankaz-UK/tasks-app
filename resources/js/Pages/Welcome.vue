@@ -34,7 +34,7 @@ function handleImageError() {
         <div class="py-5">
             <div class="container">
                 <div class="card shadow-sm">
-                    <div v-if="$page.props.auth.user" class="card-body text-dark">
+                    <div v-if="typeof($page.props.auth) !== 'undefined'" class="card-body text-dark">
                         You're logged in!
                     </div>
                     <div v-else class="card-body text-dark">
