@@ -30,12 +30,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $maleOrFemale = fake()->randomElement(['Male', 'Female']);
+        $forename = fake()->firstName($maleOrFemale);
+        $surname = fake()->lastName($maleOrFemale);
+        $email = strtolower($forename) . '.' . strtolower($surname) . '@tasks-app.co.uk';
 
         return [
             'title' => $maleOrFemale === 'Male' ? Titles::MR : Titles::MRS,
-            'forename' => fake()->firstName($maleOrFemale),
-            'surname' => fake()->lastName($maleOrFemale),
-            'email' => fake()->unique()->safeEmail(),
+            'forename' => $forename,
+            'surname' => $surname,
+            'email' => $email,
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
