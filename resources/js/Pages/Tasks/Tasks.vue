@@ -13,7 +13,7 @@ import TasksTable from "@/Components/TasksTable.vue";
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
                         <h2>Tasks</h2>
-                        <tasks-table></tasks-table>
+                        <tasks-table :page="$page"></tasks-table>
                     </div>
                 </div>
             </div>

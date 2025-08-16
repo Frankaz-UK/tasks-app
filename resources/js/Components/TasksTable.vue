@@ -5,7 +5,7 @@
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
                 <i class="fa fa-search fa-lg"></i>
             </div>
-            <div class="col-3">
+            <div class="col-3" v-if="$page.props.auth.can['task-update']">
                 <select @change="fetchData(1)" name="user" id="user" v-model="user" class="form-select">
                     <option value="">Select User...</option>
                     <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
@@ -28,7 +28,7 @@
                             <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
-                    <div class="form-group row mt-4">
+                    <div v-if="$page.props.auth.can['task-update']" class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="user_id">User:</label>
                         <div class="col-sm-10">
                             <select name="user_id" id="user_id" v-model="form.user_id" class="form-select">
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddTask">Cancel</button></template>
-                    <template #ok><button class="btn btn-primary ms-3" :disabled="form.processing" @click="saveTask">Submit</button></template>
+                    <template #ok><button v-if="$page.props.auth.can['task-update']" class="btn btn-primary ms-3" :disabled="form.processing" @click="saveTask">Submit</button></template>
                 </BModal>
             </div>
         </div>
@@ -53,22 +53,27 @@
                 </div>
             </template>
             <template #cell(user_id)="data">
-                <div>
+                <div v-if="$page.props.auth.can['task-update']">
                     <select @change="changeTaskUser(data.item)" name="user" id="user" v-model="data.item.user_id" class="form-select">
                         <option :value="null">Not Assigned</option>
                         <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
                     </select>
                 </div>
+                <div v-else>
+                    {{ data.item.user.forename }} {{ data.item.user.surname }}
+                </div>
             </template>
             <template #cell(complete)="data">
                 <div class="row">
-                    <div class="col-4 me-2">
-                        <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /> Mark Complete</button>
-                        <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
-                    </div>
-                    <div v-if="!data.item.complete" class="col-7 me2">
-                        <button type="button" class="btn btn-primary" @click="editTask(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit Task</button>&nbsp;
-                        <button type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete Task</button>
+                    <div class="col-12 me-2">
+                        <span v-if="$page.props.auth.can['task-complete']" class="inline-block me-2">
+                            <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /> Mark Complete</button>
+                            <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
+                        </span>
+                        <span v-if="!data.item.complete" class="inline-block">
+                            <button v-if="$page.props.auth.can['task-show']" type="button" class="btn btn-primary" @click="editTask(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit Task</button>&nbsp;
+                            <button v-if="$page.props.auth.can['task-delete']" type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete Task</button>
+                        </span>
                     </div>
                 </div>
             </template>
@@ -99,6 +104,9 @@ import {useForm} from "@inertiajs/vue3";
 export default {
     name: 'Tasks Table',
     components: {InputError, BModal, FontAwesomeIcon, BPagination, BTable },
+    props: {
+        page: Object,
+    },
     data() {
         return {
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -107,7 +115,7 @@ export default {
             per_page: 15,
             total_rows: 0,
             term: null,
-            user: '',
+            user: this.page.props.auth.roles.includes('user') ? this.page.props.auth.user.id : '',
             users: [],
             form: useForm({
                 name: '',
