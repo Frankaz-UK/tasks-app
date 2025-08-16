@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -38,7 +39,18 @@ class HandleInertiaRequests extends Middleware
                     'user' => $request->user(),
                     'full_name' => $request->user()->full_name ?? null,
                     'roles' => $request->user()->roles() ? $request->user()->roles()->pluck('name') : [],
-                    'can' => $request->user()->getAllPermissions() ? $request->user()->getAllPermissions()->pluck('name', 'name') : []
+                    'can' => [
+                        'task-create' => Auth::user()->can('task-create', User::class),
+                        'task-delete' => Auth::user()->can('task-delete', User::class),
+                        'task-update' => Auth::user()->can('task-update', User::class),
+                        'task-complete' => Auth::user()->can('task-complete', User::class),
+                        'task-list' => Auth::user()->can('task-list', User::class),
+                        'task-show' => Auth::user()->can('task-show', User::class),
+                        /*
+                         * other permissions to be added soon
+                         *
+                         * */
+                    ],
                 ],
                 'ziggy' => function () use ($request) {
                     return array_merge((new Ziggy)->toArray(), [
@@ -53,3 +65,20 @@ class HandleInertiaRequests extends Middleware
         }
     }
 }
+/*
+ *
+
+
+
+            'task-create',
+            'task-delete',
+            'task-update',
+            'task-complete',
+            'task-list',
+            'task-show',
+            'user-create',
+            'user-delete',
+            'user-update',
+            'user-list',
+            'user-show',
+ */
