@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-9 mb-3" id="task-search">
+            <div class="col-9 mb-3 table-search">
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
                 <i class="fa fa-search fa-lg"></i>
             </div>
