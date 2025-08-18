@@ -36,7 +36,7 @@ export default {
         this.loaded = false;
 
         try {
-            const userlist = await axios.get(route('dashboard.api.index'));
+            const userlist = await axios.get(route('api.dashboard.index'));
             this.chartData = userlist.data.results.tasksPerUser;
             this.tasksCount = userlist.data.results.tasksCount;
             this.loaded = true;

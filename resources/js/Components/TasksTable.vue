@@ -159,7 +159,7 @@ export default {
     },
     methods: {
         fetchUsers() {
-            let indexRoute = route('users.api.index');
+            let indexRoute = route('api.users.index');
 
             axios.get(indexRoute)
                 .then(({data}) => {
@@ -179,7 +179,7 @@ export default {
                 this.current_page = page;
             }
 
-            let indexRoute = route('tasks.api.index', {
+            let indexRoute = route('api.tasks.index', {
                 _query: {
                     page: this.current_page,
                     term: this.term,
@@ -210,7 +210,7 @@ export default {
                 });
         },
         changeTaskStatus(taskId) {
-            axios.post(route('tasks.api.status', {task: taskId}), {
+            axios.post(route('api.tasks.status', {task: taskId}), {
                 _token : this.csrf,
                 _method: 'patch',
             })
@@ -234,7 +234,7 @@ export default {
                 });
         },
         changeTaskUser(task) {
-            axios.post(route('tasks.api.user', {task: task.id}), {
+            axios.post(route('api.tasks.user', {task: task.id}), {
                 _token : this.csrf,
                 _method: 'patch',
                 user_id : task.user_id,
@@ -259,7 +259,7 @@ export default {
                 });
         },
         deleteTask(taskId) {
-            axios.post(route('tasks.api.destroy', {task: taskId}), {
+            axios.post(route('api.tasks.destroy', {task: taskId}), {
                 _token : this.csrf,
                 _method: 'delete',
             })
@@ -299,7 +299,7 @@ export default {
             this.addTask();
         },
         saveTask() {
-            let api_route = (this.task_id == null) ? 'tasks.api.store' : 'tasks.api.update';
+            let api_route = (this.task_id == null) ? 'api.tasks.store' : 'api.tasks.update';
             let params = (this.task_id == null) ? {} : { task: this.task_id };
             let method = (this.task_id == null) ? 'post' : 'patch';
 
