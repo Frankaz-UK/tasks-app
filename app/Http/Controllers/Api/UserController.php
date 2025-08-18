@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use DB;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +22,10 @@ class UserController extends Controller
     {
         try {
             $users = User::query()
-                ->select(
+                ->select([
                     DB::raw("CONCAT(forename,' ',surname) as fullname"),
                     'id'
-                )
+                ])
                 ->without('roles')
                 ->orderBy('fullname')
                 ->get();
