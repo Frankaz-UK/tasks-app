@@ -109,7 +109,6 @@ export default {
     },
     data() {
         return {
-            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             current_page: 1,
             last_page: 1,
             per_page: 15,
@@ -211,7 +210,6 @@ export default {
         },
         changeTaskStatus(taskId) {
             axios.post(route('api.tasks.status', {task: taskId}), {
-                _token : this.csrf,
                 _method: 'patch',
             })
                 .then(({data}) => {
@@ -235,7 +233,6 @@ export default {
         },
         changeTaskUser(task) {
             axios.post(route('api.tasks.user', {task: task.id}), {
-                _token : this.csrf,
                 _method: 'patch',
                 user_id : task.user_id,
             })
@@ -260,7 +257,6 @@ export default {
         },
         deleteTask(taskId) {
             axios.post(route('api.tasks.destroy', {task: taskId}), {
-                _token : this.csrf,
                 _method: 'delete',
             })
                 .then(({data}) => {
@@ -307,7 +303,6 @@ export default {
                 name: this.form.name,
                 description: this.form.description,
                 user_id: this.form.user_id,
-                _token : this.csrf,
                 _method: method,
             })
                 .then(({data}) => {
