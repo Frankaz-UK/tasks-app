@@ -22,11 +22,7 @@ class UserController extends Controller
     {
         try {
             $users = User::query()
-                ->select([
-                    DB::raw("CONCAT(forename,' ',surname) as fullname"),
-                    '*'
-                ])
-                ->orderBy('fullname')
+                ->orderBy('surname')
                 ->get();
         } catch (Throwable $exception) {
             return response()->json([
@@ -41,12 +37,43 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return JsonResponse
+     */
+    public function store(Request $request)
     {
-
+        return response()->json([
+            'results' => [],
+        ]);
     }
 
-    public function getUsersList(User $user): JsonResponse
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return JsonResponse
+     */
+    public function update(Request $request, string $id)
+    {
+        return response()->json([
+            'results' => [],
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return JsonResponse
+     */
+    public function destroy(string $id)
+    {
+        return response()->json([
+            'results' => [],
+        ]);
+    }
+
+    public function getUsersList(): JsonResponse
     {
         try {
             $users = User::query()
