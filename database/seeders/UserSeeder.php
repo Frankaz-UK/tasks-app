@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
             'surname' => 'Harbottle',
             'email' => 'jill.harbottle@tasks-app.co.uk',
             'telephone' => '01912345676',
-            'gender' => 'Male',
+            'gender' => 'Female',
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'position' => 'Director',
