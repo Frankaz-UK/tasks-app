@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from "@inertiajs/vue3";
-import TasksTable from "@/Components/TasksTable.vue";
+import UsersTable from "@/Components/UsersTable.vue";
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import TasksTable from "@/Components/TasksTable.vue";
                 <div class="card shadow-sm">
                     <div class="card-body text-dark">
                         <h2>Users</h2>
-                        <!-- users-table :page="$page"></users-table-->
+                        <users-table :page="$page"></users-table>
                     </div>
                 </div>
             </div>

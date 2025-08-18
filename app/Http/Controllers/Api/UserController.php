@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
@@ -21,9 +22,26 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
+            $per_page = $request->query('per_page', 15);
+
             $users = User::query()
-                ->orderBy('surname')
-                ->get();
+                ->when(
+                    !empty($request->filled('term')),
+                    function (Builder $query) use ($request): void {
+                        $query
+                            ->where('forename', 'like', '%' . $request->input('term') . '%')
+                            ->orWhere('surname', 'like', '%' . $request->input('term') . '%');
+                    },
+                )
+                ->when(
+                    !empty($request->filled('user')),
+                    function (Builder $query) use ($request): void {
+                        $query
+                            ->where('id', '=', $request->input('user'));
+                    },
+                )
+                ->orderBy('id')
+                ->paginate($per_page);
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -34,6 +52,9 @@ class UserController extends Controller
 
         return response()->json([
             'results' => $users,
+            'pagination' => [
+                'more' => $users->hasMorePages(),
+            ],
         ]);
     }
 
