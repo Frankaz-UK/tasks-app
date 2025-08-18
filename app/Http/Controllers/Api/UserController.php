@@ -24,6 +24,34 @@ class UserController extends Controller
             $users = User::query()
                 ->select([
                     DB::raw("CONCAT(forename,' ',surname) as fullname"),
+                    '*'
+                ])
+                ->orderBy('fullname')
+                ->get();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json([
+            'results' => $users,
+        ]);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+
+    }
+
+    public function getUsersList(User $user): JsonResponse
+    {
+        try {
+            $users = User::query()
+                ->select([
+                    DB::raw("CONCAT(forename,' ',surname) as fullname"),
                     'id'
                 ])
                 ->without('roles')
@@ -33,7 +61,7 @@ class UserController extends Controller
             return response()->json([
                 'message' => $exception->getMessage(),
             ],
-            Response::HTTP_INTERNAL_SERVER_ERROR
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 

@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,7 +38,9 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('/users')->name('users.')->group(function () {
-            Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'index'])->name('index');
+            Route::get('/list', [\App\Http\Controllers\Api\UserController::class, 'getUsersList'])->name('list');
+            // these routes to be added soon, add a user, edit a user, show/list users + store/update & delete
         });
     });
 
@@ -56,7 +58,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('/users')->name('users.')->group(function () {
-        // these routes to be added soon, add a user, edit a user, show/list users + store/update & delete
+        Route::get('/', [UserController::class, 'index'])->name('index');
     });
 });
 

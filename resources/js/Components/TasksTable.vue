@@ -158,9 +158,7 @@ export default {
     },
     methods: {
         fetchUsers() {
-            let indexRoute = route('api.users.index');
-
-            axios.get(indexRoute)
+            axios.get(route('api.users.list'))
                 .then(({data}) => {
                     this.users = data.results;
                 })
