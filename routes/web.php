@@ -53,15 +53,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/tasks')->name('tasks.')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('index');
-
-        Route::prefix('/api')->name('api.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\TaskController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\Api\TaskController::class, 'store'])->name('store');
-            Route::patch('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'update'])->name('update');
-            Route::patch('/{task}/status', [\App\Http\Controllers\Api\TaskController::class, 'changeStatus'])->name('status');
-            Route::patch('/{task}/user', [\App\Http\Controllers\Api\TaskController::class, 'changeUser'])->name('user');
-            Route::delete('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'destroy'])->name('destroy');
-        });
     });
 
     Route::prefix('/users')->name('users.')->group(function () {
