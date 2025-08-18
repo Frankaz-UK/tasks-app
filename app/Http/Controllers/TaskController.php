@@ -20,6 +20,6 @@ class TaskController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        return Inertia::render('Tasks/Tasks');
+        return Inertia::render('Auth/Tasks/Index');
     }
 }
