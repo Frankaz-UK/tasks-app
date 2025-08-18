@@ -125,10 +125,6 @@ export default {
             addTaskModal: false,
             fields: [
                 {
-                    key: 'id',
-                    label: '#',
-                },
-                {
                     key: 'name',
                     label: 'Name',
                     thStyle: { width: "15%" },
