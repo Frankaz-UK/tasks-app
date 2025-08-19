@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'destroy'])->name('destroy');
         });
 
+        Route::prefix('/titles')->name('titles.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'getTitlesList'])->name('list');
+        });
+
         Route::prefix('/users')->name('users.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'index'])->name('index');
             Route::get('/list', [\App\Http\Controllers\Api\UserController::class, 'getUsersList'])->name('list');

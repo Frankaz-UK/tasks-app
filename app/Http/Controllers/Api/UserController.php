@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Illuminate\Database\Eloquent\Builder;
+use App\Enums\Titles;
 
 class UserController extends Controller
 {
@@ -33,7 +34,7 @@ class UserController extends Controller
                             ->orWhere('surname', 'like', '%' . $request->input('term') . '%');
                     },
                 )
-                ->when(
+                ->when( // add for roles dropdown too
                     !empty($request->filled('user')),
                     function (Builder $query) use ($request): void {
                         $query
@@ -115,6 +116,23 @@ class UserController extends Controller
 
         return response()->json([
             'results' => $users,
+        ]);
+    }
+
+    public function getTitlesList(): JsonResponse
+    {
+        try {
+            $titles = Titles::cases();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json([
+            'results' => $titles,
         ]);
     }
 }
