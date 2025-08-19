@@ -45,6 +45,15 @@ class Task extends Model
     }
 
     /**
+     * @return void
+     */
+    public function unSetUser(): void
+    {
+        $this->user_id = null;
+        $this->save();
+    }
+
+    /**
      * Get the user associated with this task
      * @return HasOne
      */

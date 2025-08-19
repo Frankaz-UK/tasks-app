@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,10 +31,10 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('/tasks')->name('tasks.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\TaskController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\Api\TaskController::class, 'store'])->name('store');
-            Route::patch('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'update'])->name('update');
+            Route::post('/', [\App\Http\Controllers\Api\TaskController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
+            Route::patch('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
             Route::patch('/{task}/status', [\App\Http\Controllers\Api\TaskController::class, 'changeStatus'])->name('status');
-            Route::patch('/{task}/user', [\App\Http\Controllers\Api\TaskController::class, 'changeUser'])->name('user');
+            Route::patch('/{task}/user', [\App\Http\Controllers\Api\TaskController::class, 'changeUser'])->name('user')->middleware([HandlePrecognitiveRequests::class]);
             Route::delete('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'destroy'])->name('destroy');
         });
 
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('/users')->name('users.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'index'])->name('index');
             Route::get('/list', [\App\Http\Controllers\Api\UserController::class, 'getUsersList'])->name('list');
+            Route::delete('/{user}', [\App\Http\Controllers\Api\UserController::class, 'destroy'])->name('destroy');
             // these routes to be added soon, add a user, edit a user, show/list users + store/update & delete
         });
     });

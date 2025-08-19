@@ -18,14 +18,12 @@
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Task name" ref="task_name" id="name" name="name" v-model="form.name" />
-                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
                             <textarea rows="10" class="form-control" type="text" placeholder="Task description" id="description" name="description" v-model="form.description"></textarea>
-                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
                     <div v-if="$page.props.auth.can['task-update']" class="form-group row mt-4">
@@ -35,7 +33,6 @@
                                 <option value="" selected>Select User...</option>
                                 <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
                             </select>
-                            <InputError :message="form.errors.user_id" class="mt-2" />
                         </div>
                     </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddTask">Cancel</button></template>
@@ -114,7 +111,7 @@ export default {
             per_page: 15,
             total_rows: 0,
             term: null,
-            user: this.page.props.auth.roles.includes('user') ? this.page.props.auth.user.id : '',
+            user: this.page.props.auth.role.includes('user') ? this.page.props.auth.user.id : '',
             users: [],
             form: useForm({
                 name: '',

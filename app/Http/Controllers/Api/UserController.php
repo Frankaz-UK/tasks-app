@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use App\Models\User;
 use DB;
 use Illuminate\Http\JsonResponse;
@@ -34,11 +35,13 @@ class UserController extends Controller
                             ->orWhere('surname', 'like', '%' . $request->input('term') . '%');
                     },
                 )
-                ->when( // add for roles dropdown too
-                    !empty($request->filled('user')),
+                ->when(
+                    !empty($request->filled('role')),
                     function (Builder $query) use ($request): void {
                         $query
-                            ->where('id', '=', $request->input('user'));
+                            ->whereHas('roles', function ($query) use ($request): void {
+                                $query->where('name', '=', $request->input('role'));
+                            });
                     },
                 )
                 ->orderBy('id')
@@ -88,10 +91,23 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
+        try {
+            $user->tasks()->each(function (Task $task) {
+                $task->unSetUser();
+            });
+            $user->delete();
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         return response()->json([
-            'results' => [],
+            'message' => 'User successfully deleted',
         ]);
     }
 

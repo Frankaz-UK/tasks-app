@@ -6,54 +6,84 @@
                 <i class="fa fa-search fa-lg"></i>
             </div>
             <div class="col-3" v-if="$page.props.auth.can['user-update']">
-                <select @change="fetchData(1)" name="user" id="user" v-model="user" class="form-select">
-                    <option value="">Select User...</option>
-                    <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
+                <select @change="fetchData(1)" name="role" id="role" v-model="role" class="form-select">
+                    <option value="">Select Role...</option>
+                    <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
                 </select>
             </div>
-            <!--div class="col-12"> // not built yet
-                <button class="btn btn-primary" @click="adduser">Add New user</button>
-                <BModal v-model="addUserModal" :title="(user_id == null ? 'Add New' : 'Edit') + ' user'" @hide="closeAdduser" size="xl">
+            <div class="col-12">
+                <button class="btn btn-primary" @click="addUser">Add New User</button>
+                <BModal v-model="addUserModal" :title="(user_id == null ? 'Add New' : 'Edit') + ' User'" @hide="closeAddUser" size="xl">
                     <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label" for="name">user Name:</label>
+                        <label class="col-sm-2 col-form-label" for="title">Title</label>
                         <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="user name" ref="user_name" id="name" name="name" v-model="form.name" />
-                            <InputError :message="form.errors.name" class="mt-2" />
-                        </div>
-                    </div>
-                    <div class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label" for="name">user Name:</label>
-                        <div class="col-sm-10">
-                            <textarea rows="10" class="form-control" type="text" placeholder="user description" id="description" name="description" v-model="form.description"></textarea>
-                            <InputError :message="form.errors.name" class="mt-2" />
-                        </div>
-                    </div>
-                    <div v-if="$page.props.auth.can['user-update']" class="form-group row mt-4">
-                        <label class="col-sm-2 col-form-label" for="user_id">User:</label>
-                        <div class="col-sm-10">
-                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select">
-                                <option value="" selected>Select User...</option>
-                                <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
+                            <select name="title" id="title" v-model="form.title" class="form-select">
+                                <option value="">Select Title...</option>
+                                <option v-for="title in titles" :value="title">{{ title }}</option>
                             </select>
-                            <InputError :message="form.errors.user_id" class="mt-2" />
                         </div>
                     </div>
-                    <template #cancel><button class="btn btn-danger ms-3" @click="closeAdduser">Cancel</button></template>
-                    <template #ok><button v-if="$page.props.auth.can['user-update']" class="btn btn-primary ms-3" :disabled="form.processing" @click="saveuser">Submit</button></template>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="forename">Forename</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="Forename" id="forename" name="forename" type="text" v-model="form.forename" required autofocus autocomplete="forename" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="surname">Surname</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="Surname" id="surname" name="surname" type="text" v-model="form.surname" required autofocus autocomplete="surname" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="email">Email</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="Email" id="email" name="email" type="email" v-model="form.email" required autocomplete="email" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="position">Position</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="Position" id="position" name="position" type="text" v-model="form.position" required autofocus autocomplete="position" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="telephone">Telephone</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" placeholder="Telephone" id="telephone" name="telephone" type="text" v-model="form.telephone" required autofocus autocomplete="telephone" />
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="gender">Gender</label>
+                        <div class="col-sm-10">
+                            <select id="gender" name="gender" v-model="form.gender" class="form-select">
+                                <option value="">Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template #cancel><button class="btn btn-danger ms-3" @click="closeAddUser">Cancel</button></template>
+                    <template #ok><button v-if="$page.props.auth.can['user-update']" class="btn btn-primary ms-3" :disabled="form.processing" @click="saveUser">Submit</button></template>
                 </BModal>
-            </div-->
+            </div>
         </div>
         <b-table striped hover :items="items" :fields="fields">
-            <template #cell(complete)="data">
+            <template #cell(roles)="data">
                 <div class="row">
                     <div class="col-12 me-2">
-                        <span v-if="$page.props.auth.can['user-complete']" class="inline-block me-2">
-                            <button v-if="!data.item.complete" type="button" class="btn btn-success" @click="changeuserStatus(data.item.id)"><FontAwesomeIcon title="Complete" icon="fa-solid fa-check" /> Mark Complete</button>
-                            <button v-else type="button" class="btn btn-outline-info" @click="changeuserStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
+                        <span v-for="role in data.item.roles" class="inline-block">
+                            {{ role.name }}
                         </span>
-                        <span v-if="!data.item.complete" class="inline-block">
-                            <button v-if="$page.props.auth.can['user-show']" type="button" class="btn btn-primary" @click="edituser(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit user</button>&nbsp;
-                            <button v-if="$page.props.auth.can['user-delete']" type="button" class="btn btn-danger" @click="deleteuser(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete user</button>
+                    </div>
+                </div>
+            </template>
+            <template #cell(id)="data">
+                <div class="row">
+                    <div class="col-12 me-2">
+                        <span class="inline-block">
+                            <button v-if="$page.props.auth.can['user-show']" type="button" class="btn btn-primary" @click="editUser(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit user</button>&nbsp;
+                            <button v-if="$page.props.auth.can['user-delete'] && data.item.id !== $page.props.auth.user.id && checkRole(data.item.roles)" type="button" class="btn btn-danger" @click="deleteUser(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete user</button>
                         </span>
                     </div>
                 </div>
@@ -80,7 +110,7 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {BTable, BPagination, BModal} from "bootstrap-vue-next";
 import InputError from "@/Components/InputError.vue";
-import {useForm} from "@inertiajs/vue3";
+import {useForm} from 'laravel-precognition-vue';
 
 export default {
     name: 'Users Table',
@@ -95,9 +125,42 @@ export default {
             per_page: 15,
             total_rows: 0,
             term: null,
-            user: this.page.props.auth.roles.includes('user') ? this.page.props.auth.user.id : '',
-            users: [],
-            form: useForm({
+            role: '',
+            titles: [],
+            user_id: null,
+            addUserModal: false,
+            fields: [
+                {
+                    key: 'title',
+                    label: 'Title',
+                },
+                {
+                    key: 'forename',
+                    label: 'Forename',
+                },
+                {
+                    key: 'surname',
+                    label: 'Forename',
+                },
+                {
+                    key: 'email',
+                    label: 'Email',
+                },
+                {
+                    key: 'roles',
+                    label: 'Role',
+                },
+                {
+                    key: 'id',
+                    label: 'Actions',
+                },
+            ],
+            items: [],
+            api_route: (this.user_id == null) ? 'api.users.store' : 'api.users.update',
+            params: (this.user_id == null) ? {} : { user: this.user_id },
+            method: (this.user_id == null) ? 'post' : 'patch',
+            form: useForm(this.method, this.api_route, {
+                title: '',
                 forename: '',
                 surname: '',
                 email: '',
@@ -105,46 +168,17 @@ export default {
                 telephone: '',
                 gender: '',
             }),
-            user_id: null,
-            addUserModal: false,
-            fields: [
-                {
-                    key: 'title',
-                    label: 'Title',
-                    thStyle: { width: "15%" },
-                    tdStyle: { width: "15%" },
-                },
-                {
-                    key: 'forename',
-                    label: 'Forename',
-                    thStyle: { width: "20%" },
-                    tdStyle: { width: "20%" },
-                },
-                {
-                    key: 'surname',
-                    label: 'Forename',
-                    thStyle: { width: "20%" },
-                    tdStyle: { width: "20%" },
-                },
-                {
-                    key: 'email',
-                    label: 'Email',
-                    thStyle: { width: "20%" },
-                    tdStyle: { width: "20%" },
-                },
-            ],
-            items: [],
         }
     },
     mounted() {
         this.fetchData();
-        this.fetchUsers();
+        this.fetchTitles();
     },
     methods: {
-        fetchUsers() {
-            axios.get(route('api.users.list'))
+        fetchTitles() {
+            axios.get(route('api.titles.list'))
                 .then(({data}) => {
-                    this.users = data.results;
+                    this.titles = data.results;
                 })
                 .catch(error => {
                     this.$toast.open({
@@ -164,7 +198,7 @@ export default {
                 _query: {
                     page: this.current_page,
                     term: this.term,
-                    user: this.user,
+                    role: this.role,
                     per_page: this.per_page,
                 },
             });
@@ -190,7 +224,6 @@ export default {
                     });
                 });
         },
-        /* following not yet implemented
         deleteUser(userId) {
             axios.post(route('api.users.destroy', {user: userId}), {
                 _method: 'delete',
@@ -214,9 +247,11 @@ export default {
                     });
                 });
         },
+        checkRole(roles) {
+            return roles.some(role => role.name !== 'super-admin');
+        },
         closeAddUser() {
             this.addUserModal = false;
-            this.form.clearErrors();
             this.form.reset();
             this.user_id = null;
         },
@@ -231,10 +266,6 @@ export default {
             this.addUser();
         },
         saveUser() {
-            let api_route = (this.user_id == null) ? 'api.users.store' : 'api.users.update'; // change to be based on role instead
-            let params = (this.user_id == null) ? {} : { user: this.user_id };
-            let method = (this.user_id == null) ? 'post' : 'patch';
-
             axios.post(route(api_route, params), {
                 name: this.form.name,
                 description: this.form.description,
@@ -261,7 +292,6 @@ export default {
                     });
                 });
         },
-        */
     },
 }
 </script>

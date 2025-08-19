@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Spatie\Permission\Models\Role;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -38,7 +39,8 @@ class HandleInertiaRequests extends Middleware
                 'auth' => [
                     'user' => $request->user(),
                     'full_name' => $request->user()->full_name ?? null,
-                    'roles' => $request->user()->roles() ? $request->user()->roles()->pluck('name') : [],
+                    'role' => $request->user()->roles() ? $request->user()->roles()->pluck('name') : [],
+                    'roles' => Role::all()->pluck('name')->toArray(),
                     'can' => [
                         'task-create' => Auth::user()->can('task-create', User::class),
                         'task-delete' => Auth::user()->can('task-delete', User::class),
