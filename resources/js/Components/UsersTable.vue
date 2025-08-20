@@ -6,7 +6,7 @@
                 <i class="fa fa-search fa-lg"></i>
             </div>
             <div class="col-3" v-if="$page.props.auth.can['user-update']">
-                <select @change="fetchData(1)" name="role" id="role" v-model="role" class="form-select">
+                <select @change="fetchData(1)" name="roles" id="roles" v-model="role" class="form-select">
                     <option value="">Select Role...</option>
                     <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
                 </select>
@@ -63,6 +63,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row mt-4">
+                        <label class="col-sm-2 col-form-label" for="role">Role</label>
+                        <div class="col-sm-10">
+                            <select name="role" id="role" v-model="form.role" class="form-select">
+                                <option value="">Select Role...</option>
+                                <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
+                            </select>
+                        </div>
+                    </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddUser">Cancel</button></template>
                     <template #ok><button v-if="$page.props.auth.can['user-update']" class="btn btn-primary ms-3" :disabled="form.processing" @click="saveUser">Submit</button></template>
                 </BModal>
@@ -83,7 +92,7 @@
                     <div class="col-12 me-2">
                         <span class="inline-block">
                             <button v-if="$page.props.auth.can['user-show']" type="button" class="btn btn-primary" @click="editUser(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit user</button>&nbsp;
-                            <button v-if="$page.props.auth.can['user-delete'] && data.item.id !== $page.props.auth.user.id && checkRole(data.item.roles)" type="button" class="btn btn-danger" @click="deleteUser(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete user</button>
+                            <button v-if="$page.props.auth.can['user-delete'] && data.item.id !== $page.props.auth.user.id && data.item.roles[0].name !== 'super-admin'" type="button" class="btn btn-danger" @click="deleteUser(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete user</button>
                         </span>
                     </div>
                 </div>
@@ -167,6 +176,7 @@ export default {
                 position: '',
                 telephone: '',
                 gender: '',
+                role: '',
             }),
         }
     },
@@ -247,9 +257,6 @@ export default {
                     });
                 });
         },
-        checkRole(roles) {
-            return roles.some(role => role.name !== 'super-admin');
-        },
         closeAddUser() {
             this.addUserModal = false;
             this.form.reset();
@@ -260,16 +267,25 @@ export default {
         },
         editUser(user) {
             this.user_id = user.id;
-            this.form.name = user.name;
-            this.form.description = user.description;
-            this.form.user_id = user.user_id;
+            this.form.title = user.title;
+            this.form.forename = user.forename;
+            this.form.surname = user.surname;
+            this.form.email = user.email;
+            this.form.position = user.position;
+            this.form.telephone = user.telephone;
+            this.form.gender = user.gender;
+            this.form.role = user.roles[0].name;
             this.addUser();
         },
         saveUser() {
             axios.post(route(api_route, params), {
-                name: this.form.name,
-                description: this.form.description,
-                user_id: this.form.user_id,
+                title: this.form.title,
+                forename: this.form.forename,
+                surname: this.form.surname,
+                email: this.form.email,
+                position: this.form.position,
+                telephone: this.form.telephone,
+                gender: this.form.gender,
                 _method: method,
             })
                 .then(({data}) => {
