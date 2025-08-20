@@ -5,10 +5,8 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TaskController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\IndexController;
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
     Route::get('/', [IndexController::class, 'index']);
@@ -24,14 +22,23 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\Auth\DashboardController::class, 'index'])->name('index');
         });
 
-
         Route::prefix('/tasks')->name('tasks.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
-            Route::patch('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
-            Route::patch('/{task}/status', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeStatus'])->name('status');
-            Route::patch('/{task}/user', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeUser'])->name('user')->middleware([HandlePrecognitiveRequests::class]);
-            Route::delete('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'destroy'])->name('destroy');
+            Route::group(['middleware' => ['permission:task-list']], function () {
+                Route::get('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'index'])->name('index');
+            });
+            Route::group(['middleware' => ['permission:task-create']], function () {
+                Route::post('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
+            });
+            Route::group(['middleware' => ['permission:task-update']], function () {
+                Route::patch('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
+                Route::patch('/{task}/user', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeUser'])->name('user')->middleware([HandlePrecognitiveRequests::class]);
+            });
+            Route::group(['middleware' => ['permission:task-complete']], function () {
+                Route::patch('/{task}/status', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeStatus'])->name('status');
+            });
+            Route::group(['middleware' => ['permission:task-delete']], function () {
+                Route::delete('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'destroy'])->name('destroy');
+            });
         });
 
         Route::prefix('/titles')->name('titles.')->group(function () {
@@ -39,15 +46,27 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('/users')->name('users.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'index'])->name('index');
-            Route::get('/list', [\App\Http\Controllers\Api\Auth\UserController::class, 'getUsersList'])->name('list');
-            Route::post('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
-            Route::patch('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
-            Route::delete('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'destroy'])->name('destroy');
+            Route::group(['middleware' => ['permission:user-list']], function () {
+                Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'index'])->name('index');
+            });
+            Route::group(['middleware' => ['permission:user-show']], function () {
+                Route::get('/list', [\App\Http\Controllers\Api\Auth\UserController::class, 'getUsersList'])->name('list');
+            });
+            Route::group(['middleware' => ['permission:user-create']], function () {
+                Route::post('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
+            });
+            Route::group(['middleware' => ['permission:user-update']], function () {
+                Route::patch('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
+            });
+            Route::group(['middleware' => ['permission:user-delete']], function () {
+                Route::delete('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'destroy'])->name('destroy');
+            });
         });
     });
 
-    /* This section will be updated with less options (no delete for a start) and most functions transferred to the users section instead */
+    /*
+     * Might remove this section altogether? Not following the same standard. Maybe refactor or use users section instead?
+     */
     Route::prefix('/profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
@@ -56,12 +75,16 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('/tasks')->name('tasks.')->group(function () {
-        Route::get('/', [TaskController::class, 'index'])->name('index');
+    Route::group(['middleware' => ['permission:task-list']], function () {
+        Route::prefix('/tasks')->name('tasks.')->group(function () {
+            Route::get('/', [TaskController::class, 'index'])->name('index');
+        });
     });
 
-    Route::prefix('/users')->name('users.')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::group(['middleware' => ['permission:user-list']], function () {
+        Route::prefix('/users')->name('users.')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('index');
+        });
     });
 });
 
