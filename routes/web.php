@@ -1,21 +1,17 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\DashboardController;
+use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\TaskController;
+use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\IndexController;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome/Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    Route::get('/', [IndexController::class, 'index']);
 })->name('home');
 
 Route::middleware('auth')->group(function () {
@@ -25,27 +21,27 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/api')->name('api.')->group(function () {
         Route::prefix('/dashboard')->name('dashboard.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\DashboardController::class, 'index'])->name('index');
+            Route::get('/', [\App\Http\Controllers\Api\Auth\DashboardController::class, 'index'])->name('index');
         });
 
 
         Route::prefix('/tasks')->name('tasks.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\TaskController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\Api\TaskController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
-            Route::patch('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
-            Route::patch('/{task}/status', [\App\Http\Controllers\Api\TaskController::class, 'changeStatus'])->name('status');
-            Route::patch('/{task}/user', [\App\Http\Controllers\Api\TaskController::class, 'changeUser'])->name('user')->middleware([HandlePrecognitiveRequests::class]);
-            Route::delete('/{task}', [\App\Http\Controllers\Api\TaskController::class, 'destroy'])->name('destroy');
+            Route::get('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'index'])->name('index');
+            Route::post('/', [\App\Http\Controllers\Api\Auth\TaskController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
+            Route::patch('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
+            Route::patch('/{task}/status', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeStatus'])->name('status');
+            Route::patch('/{task}/user', [\App\Http\Controllers\Api\Auth\TaskController::class, 'changeUser'])->name('user')->middleware([HandlePrecognitiveRequests::class]);
+            Route::delete('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('/titles')->name('titles.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'getTitlesList'])->name('list');
+            Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'getTitlesList'])->name('list');
         });
 
         Route::prefix('/users')->name('users.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\UserController::class, 'index'])->name('index');
-            Route::get('/list', [\App\Http\Controllers\Api\UserController::class, 'getUsersList'])->name('list');
-            Route::delete('/{user}', [\App\Http\Controllers\Api\UserController::class, 'destroy'])->name('destroy');
+            Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'index'])->name('index');
+            Route::get('/list', [\App\Http\Controllers\Api\Auth\UserController::class, 'getUsersList'])->name('list');
+            Route::delete('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'destroy'])->name('destroy');
             // these routes to be added soon, add a user, edit a user, show/list users + store/update & delete
         });
     });
