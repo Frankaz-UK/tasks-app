@@ -28,7 +28,7 @@ defineProps({
                     <div class="bg-white p-4 shadow-sm rounded-lg">
                         <UpdatePasswordForm class="max-w-xl" />
                     </div>
-                    <div class="bg-white p-4 shadow-sm rounded-lg">
+                    <div v-if="$page.props.auth.can['user-delete']" class="bg-white p-4 shadow-sm rounded-lg">
                         <DeleteUserForm class="max-w-xl" />
                     </div>
                 </div>
