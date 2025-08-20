@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Enums\Titles;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\Auth\UserRequest;
 use App\Models\Task;
 use App\Models\User;
 use DB;

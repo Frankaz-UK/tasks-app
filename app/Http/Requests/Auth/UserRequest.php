@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Enums\Titles;
 use App\Models\User;
@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->id),
             ],
             'position' => 'required|string|min:5|max:255',
-            'telephone' => 'required',
+            'telephone' => 'required|phone:GB',
             'gender' => 'required|string|in:Male,Female',
             'role' => Rule::in(Role::all()->pluck('name')->toArray()),
         ];
@@ -48,6 +48,10 @@ class UserRequest extends FormRequest
             'email.string' => 'The email field must be a string',
             'email.email' => 'The email field must be a valid email address',
             'email.max' => 'The email field must be less than :max characters',
+            'position.required' => 'The position field is required',
+            'position.string' => 'The position field must be a string',
+            'position.min' => 'The position field must be at least :min characters',
+            'position.max' => 'The position field must be less than :max characters',
             'role.required' => 'The role field is required',
         ];
     }

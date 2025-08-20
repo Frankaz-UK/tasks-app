@@ -25,7 +25,7 @@ class BasicUserRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'position' => 'required|string|min:5|max:255',
-            'telephone' => 'required',
+            'telephone' => 'required|phone:GB',
             'gender' => 'required|string|in:Male,Female',
         ];
     }
