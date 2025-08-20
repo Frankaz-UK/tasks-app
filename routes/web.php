@@ -41,8 +41,9 @@ Route::middleware('auth')->group(function () {
         Route::prefix('/users')->name('users.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'index'])->name('index');
             Route::get('/list', [\App\Http\Controllers\Api\Auth\UserController::class, 'getUsersList'])->name('list');
+            Route::post('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'store'])->name('store')->middleware([HandlePrecognitiveRequests::class]);
+            Route::patch('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'update'])->name('update')->middleware([HandlePrecognitiveRequests::class]);
             Route::delete('/{user}', [\App\Http\Controllers\Api\Auth\UserController::class, 'destroy'])->name('destroy');
-            // these routes to be added soon, add a user, edit a user, show/list users + store/update & delete
         });
     });
 
