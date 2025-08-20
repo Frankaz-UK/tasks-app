@@ -1,79 +1,86 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Auth;
 
+use App\Enums\Titles;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TaskListRequest;
-use App\Http\Requests\TaskRequest;
-use App\Http\Requests\TaskUserRequest;
+use App\Http\Requests\Auth\UserRequest;
 use App\Models\Task;
+use App\Models\User;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class TaskController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param TaskListRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(TaskListRequest $request): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $per_page = $request->query('per_page', 15);
 
-            $tasks = Task::query()
+            $users = User::query()
                 ->when(
                     !empty($request->filled('term')),
                     function (Builder $query) use ($request): void {
                         $query
-                            ->where('name', 'like', '%' . $request->input('term') . '%');
+                            ->where('forename', 'like', '%' . $request->input('term') . '%')
+                            ->orWhere('surname', 'like', '%' . $request->input('term') . '%');
                     },
                 )
                 ->when(
-                    !empty($request->filled('user')),
+                    !empty($request->filled('role')),
                     function (Builder $query) use ($request): void {
                         $query
-                            ->where('user_id', '=', $request->input('user'));
+                            ->whereHas('roles', function ($query) use ($request): void {
+                                $query->where('name', '=', $request->input('role'));
+                            });
                     },
                 )
-                ->withOnly('user')
                 ->orderBy('id')
                 ->paginate($per_page);
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
             ],
-            Response::HTTP_INTERNAL_SERVER_ERROR
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
 
         return response()->json([
-            'results' => $tasks,
+            'results' => $users,
             'pagination' => [
-                'more' => $tasks->hasMorePages(),
+                'more' => $users->hasMorePages(),
             ],
         ]);
     }
 
     /**
-     * Store a newly created resource in storage. (note: Task $task creates a new instance of Task model)
-     *
-     * @param TaskRequest $request
-     * @param Task $task
+     * Store a newly created resource in storage.
+     * @param User $user
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function store(TaskRequest $request, Task $task): JsonResponse
+    public function store(User $user, UserRequest $request)
     {
         try {
-            $task->name = $request->input('name');
-            $task->description = $request->input('description');
-            $task->user_id = $request->input('user_id');
-            $task->save();
+            $user->title = $request->input('title');
+            $user->forename = $request->input('forename');
+            $user->surname = $request->input('surname');
+            $user->email = $request->input('email');
+            $user->position = $request->input('position');
+            $user->telephone  = $request->input('telephone');
+            $user->gender = $request->input('gender');
+            $user->save();
+            $user->syncRoles($request->input('role'));
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -83,24 +90,28 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task successfully added',
+            'message' => 'User successfully added',
         ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param Task $task
-     * @param TaskRequest $request
+     * @param User $user
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function update(Task $task, TaskRequest $request): JsonResponse
+    public function update(User $user, UserRequest $request)
     {
         try {
-            $task->name = $request->input('name');
-            $task->description = $request->input('description');
-            $task->user_id = $request->input('user_id');
-            $task->save();
+            $user->title = $request->input('title');
+            $user->forename = $request->input('forename');
+            $user->surname = $request->input('surname');
+            $user->email = $request->input('email');
+            $user->position = $request->input('position');
+            $user->telephone  = $request->input('telephone');
+            $user->gender = $request->input('gender');
+            $user->save();
+            $user->syncRoles($request->input('role'));
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -110,20 +121,22 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task successfully updated',
+            'message' => 'User successfully updated',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Task $task
      * @return JsonResponse
      */
-    public function destroy(Task $task): JsonResponse
+    public function destroy(User $user)
     {
         try {
-            $task->delete();
+            $user->tasks()->each(function (Task $task) {
+                $task->unSetUser();
+            });
+            $user->delete();
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -133,21 +146,24 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task successfully deleted',
+            'message' => 'User successfully deleted',
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param Task $task
      * @return JsonResponse
      */
-    public function changeStatus(Task $task): JsonResponse
+    public function getUsersList(): JsonResponse
     {
         try {
-            $status = $task->getCompleteStatus();
-            $status ? $task->unSetComplete() : $task->setComplete();
+            $users = User::query()
+                ->select([
+                    DB::raw("CONCAT(forename,' ',surname) as fullname"),
+                    'id'
+                ])
+                ->without('roles')
+                ->orderBy('fullname')
+                ->get();
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -157,21 +173,17 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task status successfully changed',
+            'results' => $users,
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param Task $task
      * @return JsonResponse
      */
-    public function changeUser(Task $task, TaskUserRequest $request): JsonResponse
+    public function getTitlesList(): JsonResponse
     {
         try {
-            $task->user_id = $request->input('user_id');
-            $task->save();
+            $titles = Titles::cases();
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -181,7 +193,7 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => 'Task user successfully changed',
+            'results' => $titles,
         ]);
     }
 }

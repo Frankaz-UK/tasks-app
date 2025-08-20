@@ -10,11 +10,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "devsarfo/laraphone": "^1.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "propaganistas/laravel-phone": "^5.3",
         "spatie/laravel-permission": "^6.15",
         "tightenco/ziggy": "^2.0"
     },
