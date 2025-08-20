@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-9 mb-3" id="task-search">
+            <div class="col-9 mb-3 table-search">
                 <input @input="fetchData(1)" v-model="term" placeholder="Search..." class="form-control" />
                 <i class="fa fa-search fa-lg"></i>
             </div>
@@ -18,14 +18,12 @@
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Task name" ref="task_name" id="name" name="name" v-model="form.name" />
-                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
                             <textarea rows="10" class="form-control" type="text" placeholder="Task description" id="description" name="description" v-model="form.description"></textarea>
-                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                     </div>
                     <div v-if="$page.props.auth.can['task-update']" class="form-group row mt-4">
@@ -35,7 +33,6 @@
                                 <option value="" selected>Select User...</option>
                                 <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
                             </select>
-                            <InputError :message="form.errors.user_id" class="mt-2" />
                         </div>
                     </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddTask">Cancel</button></template>
@@ -109,13 +106,12 @@ export default {
     },
     data() {
         return {
-            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             current_page: 1,
             last_page: 1,
             per_page: 15,
             total_rows: 0,
             term: null,
-            user: this.page.props.auth.roles.includes('user') ? this.page.props.auth.user.id : '',
+            user: this.page.props.auth.role.includes('user') ? this.page.props.auth.user.id : '',
             users: [],
             form: useForm({
                 name: '',
@@ -125,10 +121,6 @@ export default {
             task_id: null,
             addTaskModal: false,
             fields: [
-                {
-                    key: 'id',
-                    label: '#',
-                },
                 {
                     key: 'name',
                     label: 'Name',
@@ -159,9 +151,7 @@ export default {
     },
     methods: {
         fetchUsers() {
-            let indexRoute = route('users.api.index');
-
-            axios.get(indexRoute)
+            axios.get(route('api.users.list'))
                 .then(({data}) => {
                     this.users = data.results;
                 })
@@ -179,7 +169,7 @@ export default {
                 this.current_page = page;
             }
 
-            let indexRoute = route('tasks.api.index', {
+            let indexRoute = route('api.tasks.index', {
                 _query: {
                     page: this.current_page,
                     term: this.term,
@@ -210,8 +200,7 @@ export default {
                 });
         },
         changeTaskStatus(taskId) {
-            axios.post(route('tasks.api.status', {task: taskId}), {
-                _token : this.csrf,
+            axios.post(route('api.tasks.status', {task: taskId}), {
                 _method: 'patch',
             })
                 .then(({data}) => {
@@ -234,8 +223,7 @@ export default {
                 });
         },
         changeTaskUser(task) {
-            axios.post(route('tasks.api.user', {task: task.id}), {
-                _token : this.csrf,
+            axios.post(route('api.tasks.user', {task: task.id}), {
                 _method: 'patch',
                 user_id : task.user_id,
             })
@@ -259,8 +247,7 @@ export default {
                 });
         },
         deleteTask(taskId) {
-            axios.post(route('tasks.api.destroy', {task: taskId}), {
-                _token : this.csrf,
+            axios.post(route('api.tasks.destroy', {task: taskId}), {
                 _method: 'delete',
             })
                 .then(({data}) => {
@@ -299,7 +286,7 @@ export default {
             this.addTask();
         },
         saveTask() {
-            let api_route = (this.task_id == null) ? 'tasks.api.store' : 'tasks.api.update';
+            let api_route = (this.task_id == null) ? 'api.tasks.store' : 'api.tasks.update';
             let params = (this.task_id == null) ? {} : { task: this.task_id };
             let method = (this.task_id == null) ? 'post' : 'patch';
 
@@ -307,7 +294,6 @@ export default {
                 name: this.form.name,
                 description: this.form.description,
                 user_id: this.form.user_id,
-                _token : this.csrf,
                 _method: method,
             })
                 .then(({data}) => {

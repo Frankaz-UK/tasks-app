@@ -7,11 +7,11 @@
     max-width: 1320px;
 }
 
-#task-search {
+.table-search {
     position: relative
 }
 
-#task-search i {
+.table-search i {
     position: absolute;
     right: 20px;
     top: 20px;

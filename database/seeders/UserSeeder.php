@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Enums\Titles;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -56,7 +55,7 @@ class UserSeeder extends Seeder
             'surname' => 'Harbottle',
             'email' => 'jill.harbottle@tasks-app.co.uk',
             'telephone' => '01912345676',
-            'gender' => 'Male',
+            'gender' => 'Female',
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
             'position' => 'Director',
