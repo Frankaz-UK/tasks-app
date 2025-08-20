@@ -12,7 +12,7 @@
                 </select>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" @click="addUser">Add New User</button>
+                <button v-if="$page.props.auth.can['user-create']" class="btn btn-primary" @click="addUser">Add New User</button>
                 <BModal v-model="addUserModal" :title="(user_id == null ? 'Add New' : 'Edit') + ' User'" @hide="closeAddUser" size="xl">
                     <div v-if="form.validating" class="text-success">
                         <b>Validating...</b>
@@ -308,7 +308,6 @@ export default {
             this.form.forgetError('telephone');
             this.form.forgetError('gender');
             this.form.forgetError('role');
-            console.log(this.form.touched('title').valueOf(false))
             this.form.reset();
             this.user_id = null;
         },
