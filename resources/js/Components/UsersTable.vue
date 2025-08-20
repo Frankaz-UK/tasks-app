@@ -14,39 +14,51 @@
             <div class="col-12">
                 <button class="btn btn-primary" @click="addUser">Add New User</button>
                 <BModal v-model="addUserModal" :title="(user_id == null ? 'Add New' : 'Edit') + ' User'" @hide="closeAddUser" size="xl">
+                    <div v-if="form.validating" class="text-success">
+                        <b>Validating...</b>
+                    </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="title">Title</label>
                         <div class="col-sm-10">
-                            <select name="title" id="title" v-model="form.title" class="form-select">
+                            <select name="title" id="title" v-model="form.title" class="form-select" @click="form.validate('title')">
                                 <option value="">Select Title...</option>
                                 <option v-for="title in titles" :value="title">{{ title }}</option>
                             </select>
+                            <div class="row">
+                                <div v-if="form.invalid('title')" class="col-sm-12 text-danger">
+                                    {{ form.errors.title }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="forename">Forename</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Forename" id="forename" name="forename" type="text" v-model="form.forename" required autofocus autocomplete="forename" />
+                            <input class="form-control" placeholder="Forename" id="forename" name="forename" type="text" v-model="form.forename" required autofocus autocomplete="forename" @focusout="form.validate('forename')" />
+                            <div class="row">
+                                <div v-if="form.invalid('forename')" class="col-sm-12 text-danger">
+                                    {{ form.errors.forename }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="surname">Surname</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Surname" id="surname" name="surname" type="text" v-model="form.surname" required autofocus autocomplete="surname" />
+                            <input class="form-control" placeholder="Surname" id="surname" name="surname" type="text" v-model="form.surname" required autofocus autocomplete="surname" @focusout="form.validate('surname')" />
+                            <div class="row">
+                                <div v-if="form.invalid('surname')" class="col-sm-12 text-danger">
+                                    {{ form.errors.surname }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="email">Email</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Email" id="email" name="email" type="email" v-model="form.email" required autocomplete="email" @change="form.validate('email')" />
+                            <input class="form-control" placeholder="Email" id="email" name="email" type="email" v-model="form.email" required autocomplete="email" @focusout="form.validate('email')" />
                             <div class="row">
-                                <div v-if="form.valid('email')" class="col-sm-1">
-                                    ✅
-                                </div>
-                                <div v-else-if="form.invalid('email')" class="col-sm-1">
-                                    ❌
-                                </div>
-                                <div v-if="form.invalid('email')" class="col-sm-11 text-danger">
+                                <div v-if="form.invalid('email')" class="col-sm-12 text-danger">
                                     {{ form.errors.email }}
                                 </div>
                             </div>
@@ -55,32 +67,52 @@
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="position">Position</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Position" id="position" name="position" type="text" v-model="form.position" required autofocus autocomplete="position" />
+                            <input class="form-control" placeholder="Position" id="position" name="position" type="text" v-model="form.position" required autofocus autocomplete="position" @focusout="form.validate('position')" />
+                            <div class="row">
+                                <div v-if="form.invalid('position')" class="col-sm-12 text-danger">
+                                    {{ form.errors.position }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="telephone">Telephone</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Telephone" id="telephone" name="telephone" type="text" v-model="form.telephone" required autofocus autocomplete="telephone" />
+                            <input class="form-control" placeholder="Telephone" id="telephone" name="telephone" type="text" v-model="form.telephone" required autofocus autocomplete="telephone" @focusout="form.validate('telephone')" />
+                            <div class="row">
+                                <div v-if="form.invalid('telephone')" class="col-sm-12 text-danger">
+                                    {{ form.errors.telephone }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="gender">Gender</label>
                         <div class="col-sm-10">
-                            <select id="gender" name="gender" v-model="form.gender" class="form-select">
+                            <select id="gender" name="gender" v-model="form.gender" class="form-select" @click="form.validate('gender')">
                                 <option value="">Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
+                            <div class="row">
+                                <div v-if="form.invalid('gender')" class="col-sm-12 text-danger">
+                                    {{ form.errors.gender }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row mt-4">
+                    <div v-if="$page.props.auth.role.includes('super-admin')" class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="role">Role</label>
                         <div class="col-sm-10">
-                            <select name="role" id="role" v-model="form.role" class="form-select">
+                            <select name="role" id="role" v-model="form.role" class="form-select" @click="form.validate('role')">
                                 <option value="">Select Role...</option>
                                 <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
                             </select>
+                            <div class="row">
+                                <div v-if="form.invalid('role')" class="col-sm-12 text-danger">
+                                    {{ form.errors.role }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddUser">Cancel</button></template>
@@ -268,6 +300,15 @@ export default {
         },
         closeAddUser() {
             this.addUserModal = false;
+            this.form.forgetError('title');
+            this.form.forgetError('forename');
+            this.form.forgetError('surname');
+            this.form.forgetError('email');
+            this.form.forgetError('position');
+            this.form.forgetError('telephone');
+            this.form.forgetError('gender');
+            this.form.forgetError('role');
+            console.log(this.form.touched('title').valueOf(false))
             this.form.reset();
             this.user_id = null;
         },
