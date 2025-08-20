@@ -68,20 +68,3 @@ class HandleInertiaRequests extends Middleware
         }
     }
 }
-/*
- *
-
-
-
-            'task-create',
-            'task-delete',
-            'task-update',
-            'task-complete',
-            'task-list',
-            'task-show',
-            'user-create',
-            'user-delete',
-            'user-update',
-            'user-list',
-            'user-show',
- */
