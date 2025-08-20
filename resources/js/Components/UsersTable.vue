@@ -38,7 +38,18 @@
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="email">Email</label>
                         <div class="col-sm-10">
-                            <input class="form-control" placeholder="Email" id="email" name="email" type="email" v-model="form.email" required autocomplete="email" />
+                            <input class="form-control" placeholder="Email" id="email" name="email" type="email" v-model="form.email" required autocomplete="email" @change="form.validate('email')" />
+                            <div class="row">
+                                <div v-if="form.valid('email')" class="col-sm-1">
+                                    ✅
+                                </div>
+                                <div v-else-if="form.invalid('email')" class="col-sm-1">
+                                    ❌
+                                </div>
+                                <div v-if="form.invalid('email')" class="col-sm-11 text-danger">
+                                    {{ form.errors.email }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
@@ -165,10 +176,8 @@ export default {
                 },
             ],
             items: [],
-            api_route: (this.user_id == null) ? 'api.users.store' : 'api.users.update',
-            params: (this.user_id == null) ? {} : { user: this.user_id },
-            method: (this.user_id == null) ? 'post' : 'patch',
-            form: useForm(this.method, this.api_route, {
+            form: useForm('post', '/api/users', {
+                id: '',
                 title: '',
                 forename: '',
                 surname: '',
@@ -267,6 +276,7 @@ export default {
         },
         editUser(user) {
             this.user_id = user.id;
+            this.form.id = user.id;
             this.form.title = user.title;
             this.form.forename = user.forename;
             this.form.surname = user.surname;
@@ -278,7 +288,12 @@ export default {
             this.addUser();
         },
         saveUser() {
+            let params = (this.user_id == null) ? {} : { user: this.user_id };
+            let api_route = (this.user_id == null) ? 'api.users.store' : 'api.users.update';
+            let method = (this.user_id == null) ? 'post' : 'patch';
+
             axios.post(route(api_route, params), {
+                id: this.form.id,
                 title: this.form.title,
                 forename: this.form.forename,
                 surname: this.form.surname,
@@ -286,6 +301,7 @@ export default {
                 position: this.form.position,
                 telephone: this.form.telephone,
                 gender: this.form.gender,
+                role: this.form.role,
                 _method: method,
             })
                 .then(({data}) => {
@@ -297,7 +313,7 @@ export default {
                     });
 
                     this.fetchData();
-                    this.closeAdduser();
+                    this.closeAddUser();
                 })
                 .catch(error => {
                     this.$toast.open({
