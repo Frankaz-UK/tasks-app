@@ -13,75 +13,11 @@ run `composer install`
 
 run `npm install`
 
-**2. Copy and paste the following into a new file and save as .env in the repository folder:**
-##
-    APP_NAME="Tasks App"
-    APP_ENV=local
-    APP_KEY=base64:ToQZRCcXSRXhH8ynQ58UnIl2zVmdbRGb1enKcStltFw=
-    APP_DEBUG=true
-    APP_TIMEZONE=UTC
-    APP_URL=http://localhost
+**2. Copy the .env.local.example file to .env**
 
-    APP_LOCALE=en
-    APP_FALLBACK_LOCALE=en
-    APP_FAKER_LOCALE=en_US
+**3. run `php artisan key:generate` to generate a new app key.**
 
-    APP_MAINTENANCE_DRIVER=file
-
-    PHP_CLI_SERVER_WORKERS=4
-
-    BCRYPT_ROUNDS=12
-
-    LOG_CHANNEL=stack
-    LOG_STACK=single
-    LOG_DEPRECATIONS_CHANNEL=null
-    LOG_LEVEL=debug
-
-    DB_CONNECTION=mysql
-    DB_HOST=mysql
-    DB_PORT=3306
-    DB_DATABASE=tasks_app
-    DB_USERNAME=sail
-    DB_PASSWORD=password
-
-    SESSION_DRIVER=database
-    SESSION_LIFETIME=120
-    SESSION_ENCRYPT=false
-    SESSION_PATH=/
-    SESSION_DOMAIN=null
-
-    BROADCAST_CONNECTION=log
-    FILESYSTEM_DISK=local
-    QUEUE_CONNECTION=database
-
-    CACHE_STORE=database
-    CACHE_PREFIX=
-
-    MEMCACHED_HOST=127.0.0.1
-
-    REDIS_CLIENT=phpredis
-    REDIS_HOST=127.0.0.1
-    REDIS_PASSWORD=null
-    REDIS_PORT=6379
-
-    MAIL_MAILER=log
-    MAIL_SCHEME=null
-    MAIL_HOST=127.0.0.1
-    MAIL_PORT=2525
-    MAIL_USERNAME=null
-    MAIL_PASSWORD=null
-    MAIL_FROM_ADDRESS="hello@example.com"
-    MAIL_FROM_NAME="${APP_NAME}"
-
-    AWS_ACCESS_KEY_ID=
-    AWS_SECRET_ACCESS_KEY=
-    AWS_DEFAULT_REGION=us-east-1
-    AWS_BUCKET=
-    AWS_USE_PATH_STYLE_ENDPOINT=false
-
-    VITE_APP_NAME="${APP_NAME}"
-
-**3. You will need three tabs open in your terminal in the repositories folder for the following section:**
+**4. You will need three tabs open in your terminal in the repositories folder for the following section:**
 
 run `./vendor/bin/sail up`
 
@@ -89,6 +25,6 @@ run `npm run dev`
 
 run `./vendor/bin/sail artisan migrate:fresh --seed` (adds entries to the database for users with roles and tasks)
 
-Navigate to http://localhost
+**5. Navigate to http://localhost**
 
-Logins can be found in the users table, all passwords are **password**.
+**6. Logins can be found in the users seeder, all passwords are *password*.**
