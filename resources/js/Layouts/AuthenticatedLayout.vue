@@ -37,7 +37,7 @@ function routeCheck(url) {
                             <div><Link :href="route('dashboard.index')" class="btn" :class="routeCheck(route('dashboard.index')) ? 'btn-outline-primary' : 'btn-primary'">Dashboard</Link></div>
                             <div><Link :href="route('tasks.index')" class="btn" :class="routeCheck(route('tasks.index')) ? 'btn-outline-primary' : 'btn-primary'">Tasks</Link></div>
                             <div><Link :href="route('profile.edit')" class="btn" :class="routeCheck(route('profile.edit')) ? 'btn-outline-primary' : 'btn-primary'">Edit Profile</Link></div>
-                            <div><Link :href="route('users.index')" class="btn" :class="routeCheck(route('users.index')) ? 'btn-outline-primary' : 'btn-primary'">Users</Link></div>
+                            <div v-if="$page.props.auth.can['user-list']"><Link :href="route('users.index')" class="btn" :class="routeCheck(route('users.index')) ? 'btn-outline-primary' : 'btn-primary'">Users</Link></div>
                         </div>
                     </div>
                     <div class="col-2">

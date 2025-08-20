@@ -12,27 +12,42 @@
                 </select>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" @click="addTask">Add New Task</button>
+                <button v-if="$page.props.auth.can['task-create']" class="btn btn-primary" @click="addTask">Add New Task</button>
                 <BModal v-model="addTaskModal" :title="(task_id == null ? 'Add New' : 'Edit') + ' Task'" @hide="closeAddTask" size="xl">
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Task name" ref="task_name" id="name" name="name" v-model="form.name" />
+                            <input class="form-control" type="text" placeholder="Task name" ref="task_name" id="name" name="name" v-model="form.name" @focusout="form.validate('name')" />
+                            <div class="row">
+                                <div v-if="form.invalid('name')" class="col-sm-12 text-danger">
+                                    {{ form.errors.name }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="name">Task Name:</label>
                         <div class="col-sm-10">
-                            <textarea rows="10" class="form-control" type="text" placeholder="Task description" id="description" name="description" v-model="form.description"></textarea>
+                            <textarea rows="10" class="form-control" type="text" placeholder="Task description" id="description" name="description" v-model="form.description" @focusout="form.validate('description')"></textarea>
+                            <div class="row">
+                                <div v-if="form.invalid('description')" class="col-sm-12 text-danger">
+                                    {{ form.errors.description }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div v-if="$page.props.auth.can['task-update']" class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="user_id">User:</label>
                         <div class="col-sm-10">
-                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select">
+                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select" @click="form.validate('user_id')">
                                 <option value="" selected>Select User...</option>
                                 <option v-for="user in users" :value="user.id">{{ user.fullname }}</option>
                             </select>
+                            <div class="row">
+                                <div v-if="form.invalid('user_id')" class="col-sm-12 text-danger">
+                                    {{ form.errors.user_id }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <template #cancel><button class="btn btn-danger ms-3" @click="closeAddTask">Cancel</button></template>
@@ -68,7 +83,7 @@
                             <button v-else type="button" class="btn btn-outline-info" @click="changeTaskStatus(data.item.id)"><FontAwesomeIcon title="Un-complete" icon="fa-sold fa-undo" /> Unmark</button>
                         </span>
                         <span v-if="!data.item.complete" class="inline-block">
-                            <button v-if="$page.props.auth.can['task-show']" type="button" class="btn btn-primary" @click="editTask(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit Task</button>&nbsp;
+                            <button v-if="$page.props.auth.can['task-update']" type="button" class="btn btn-primary" @click="editTask(data.item)"><FontAwesomeIcon title="Edit" icon="fa-solid fa-edit" /> Edit Task</button>&nbsp;
                             <button v-if="$page.props.auth.can['task-delete']" type="button" class="btn btn-danger" @click="deleteTask(data.item.id)"><FontAwesomeIcon title="Delete" icon="fa-solid fa-xmark" /> Delete Task</button>
                         </span>
                     </div>
@@ -96,7 +111,7 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {BTable, BPagination, BModal} from "bootstrap-vue-next";
 import InputError from "@/Components/InputError.vue";
-import {useForm} from "@inertiajs/vue3";
+import {useForm} from 'laravel-precognition-vue';
 
 export default {
     name: 'Tasks Table',
@@ -113,7 +128,7 @@ export default {
             term: null,
             user: this.page.props.auth.role.includes('user') ? this.page.props.auth.user.id : '',
             users: [],
-            form: useForm({
+            form: useForm('post', '/api/tasks', {
                 name: '',
                 description: '',
                 user_id: '',
@@ -271,7 +286,9 @@ export default {
         },
         closeAddTask() {
             this.addTaskModal = false;
-            this.form.clearErrors();
+            this.form.forgetError('name');
+            this.form.forgetError('description');
+            this.form.forgetError('user_id');
             this.form.reset();
             this.task_id = null;
         },
