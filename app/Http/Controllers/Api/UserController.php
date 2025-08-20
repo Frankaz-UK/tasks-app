@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\Task;
 use App\Models\User;
 use DB;
@@ -64,25 +65,63 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @param User $user
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(User $user, UserRequest $request)
     {
+        try {
+            $user->title = $request->input('title');
+            $user->forename = $request->input('forename');
+            $user->surname = $request->input('surname');
+            $user->email = $request->input('email');
+            $user->position = $request->input('position');
+            $user->telephone  = $request->input('telephone');
+            $user->gender = $request->input('gender');
+            $user->save();
+            $user->syncRoles($request->input('role'));
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         return response()->json([
-            'results' => [],
+            'message' => 'User successfully added',
         ]);
     }
 
     /**
      * Update the specified resource in storage.
-     *
+     * @param User $user
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function update(Request $request, string $id)
+    public function update(User $user, UserRequest $request)
     {
+        try {
+            $user->title = $request->input('title');
+            $user->forename = $request->input('forename');
+            $user->surname = $request->input('surname');
+            $user->email = $request->input('email');
+            $user->position = $request->input('position');
+            $user->telephone  = $request->input('telephone');
+            $user->gender = $request->input('gender');
+            $user->save();
+            $user->syncRoles($request->input('role'));
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
         return response()->json([
-            'results' => [],
+            'message' => 'User successfully updated',
         ]);
     }
 
@@ -111,6 +150,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getUsersList(): JsonResponse
     {
         try {
@@ -135,6 +177,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getTitlesList(): JsonResponse
     {
         try {
