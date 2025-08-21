@@ -5,11 +5,18 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TaskController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\IndexController;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    Route::get('/', [IndexController::class, 'index']);
+    return Inertia::render('Welcome/Index', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 })->name('home');
 
 Route::middleware('auth')->group(function () {
