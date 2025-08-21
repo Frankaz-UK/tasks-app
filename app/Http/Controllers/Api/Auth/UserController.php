@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Enums\Titles;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserListRequest;
 use App\Http\Requests\Auth\UserRequest;
 use App\Models\Task;
 use App\Models\User;
@@ -19,10 +20,10 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param UserListRequest $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(UserListRequest $request): JsonResponse
     {
         try {
             $per_page = $request->query('per_page', 15);
