@@ -22,11 +22,13 @@ class BasicUserRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                Rule::unique(User::class),
             ],
             'position' => 'required|string|min:5|max:255',
             'telephone' => 'required|phone:GB',
             'gender' => 'required|string|in:Male,Female',
+            'password' => 'required|string|confirmed|min:12',
+            'password_confirmation' => 'required|string|min:12',
         ];
     }
 
@@ -46,6 +48,11 @@ class BasicUserRequest extends FormRequest
             'email.string' => 'The email field must be a string',
             'email.email' => 'The email field must be a valid email address',
             'email.max' => 'The email field must be less than :max characters',
+            'password.confirmed' => 'The password confirmation does not match',
+            'password.required' => 'The password field is required',
+            'password.min' => 'The password field must be at least :min characters',
+            'password_confirmation.min' => 'The password confirmation field must be at least :min characters',
+            'password_confirmation.required' => 'The password confirmation field is required',
         ];
     }
 }
