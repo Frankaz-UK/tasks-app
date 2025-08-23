@@ -27,8 +27,8 @@ class BasicUserRequest extends FormRequest
             'position' => 'required|string|min:5|max:255',
             'telephone' => 'required|phone:GB',
             'gender' => 'required|string|in:Male,Female',
-            'password' => 'required|string|confirmed|min:12',
-            'password_confirmation' => 'required|string|min:12',
+            'password' => 'required|string|confirmed|min:8',
+            'password_confirmation' => 'required|string|min:8',
         ];
     }
 
