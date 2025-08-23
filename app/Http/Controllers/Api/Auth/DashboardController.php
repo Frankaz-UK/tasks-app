@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -28,6 +30,13 @@ class DashboardController extends Controller
                             $query->where('complete', 1);
                         }])
                     ->orderBy('surname')
+                    ->when(
+                        Auth::user()->hasRole('user'),
+                        function (Builder $query) : void {
+                            $query
+                                ->where('id', '=', Auth::user()->id);
+                        },
+                    )
                     ->where('id', '!=', 1)
                     ->get();
             $tasksCount = [
