@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div v-if="!$page.props.auth.role.includes('user')" class="row">
             <div class="col-md-3">Total Tasks: <b class="text-primary">{{ loaded ? tasksCount.tasks : 0 }}</b></div>
             <div class="col-md-3">Total Completed Tasks: <b class="text-success">{{ loaded ? tasksCount.tasksCompleted : 0 }}</b></div>
             <div class="col-md-3">Total Incomplete Tasks: <b class="text-danger">{{ loaded ? (tasksCount.tasks - tasksCount.tasksCompleted) : 0 }}</b></div>
