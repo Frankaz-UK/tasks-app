@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Enums\Titles;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class BasicUserRequest extends FormRequest
+class ProfileUpdateRequest extends FormRequest
 {
     /** @return array<string, array<Rule|string>|Rule|string> */
     public function rules(): array
@@ -22,13 +22,11 @@ class BasicUserRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class),
+                Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'position' => 'required|string|min:5|max:255',
             'telephone' => 'required|phone:GB',
             'gender' => 'required|string|in:Male,Female',
-            'password' => 'required|string|confirmed|min:8',
-            'password_confirmation' => 'required|string|min:8',
         ];
     }
 
@@ -48,11 +46,6 @@ class BasicUserRequest extends FormRequest
             'email.string' => 'The email field must be a string',
             'email.email' => 'The email field must be a valid email address',
             'email.max' => 'The email field must be less than :max characters',
-            'password.confirmed' => 'The password confirmation does not match',
-            'password.required' => 'The password field is required',
-            'password.min' => 'The password field must be at least :min characters',
-            'password_confirmation.min' => 'The password confirmation field must be at least :min characters',
-            'password_confirmation.required' => 'The password confirmation field is required',
         ];
     }
 }
