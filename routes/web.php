@@ -62,13 +62,12 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    /*
-     * Might remove this section altogether? Not following the same standard. Maybe refactor or use users section instead?
-     */
     Route::prefix('/profile')->name('profile.')->group(function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('update');
-        Route::group(['middleware' => ['permission:user-delete']], function () {
+        Route::group(['middleware' => ['permission:profile-update']], function () {
+            Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+            Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        });
+        Route::group(['middleware' => ['permission:profile-delete']], function () {
             Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
         });
     });
