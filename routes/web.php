@@ -5,19 +5,14 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TaskController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\IndexController;
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome/Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->name('home');
+Route::get('/', [IndexController::class, 'index'])->name('home');
+
+Route::prefix('/api/titles')->name('api.titles.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'getTitlesList'])->name('list');
+});
 
 Route::middleware('auth')->group(function () {
     Route::prefix('/dashboard')->name('dashboard.')->group(function () {
@@ -46,10 +41,6 @@ Route::middleware('auth')->group(function () {
             Route::group(['middleware' => ['permission:task-delete']], function () {
                 Route::delete('/{task}', [\App\Http\Controllers\Api\Auth\TaskController::class, 'destroy'])->name('destroy');
             });
-        });
-
-        Route::prefix('/titles')->name('titles.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Api\Auth\UserController::class, 'getTitlesList'])->name('list');
         });
 
         Route::prefix('/users')->name('users.')->group(function () {
