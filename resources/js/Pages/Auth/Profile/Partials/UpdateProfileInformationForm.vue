@@ -1,6 +1,8 @@
 <script setup>
 import InputError from '@/Components/InputError.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import {onMounted, ref} from "vue";
+import {useToast} from "vue-toast-notification";
 
 defineProps({
     mustVerifyEmail: {
@@ -14,12 +16,30 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
+    title: user.title,
     forename: user.forename,
     surname: user.surname,
     email: user.email,
     position: user.position,
     telephone: user.telephone,
     gender: user.gender,
+});
+
+const titles = ref([]);
+
+onMounted(async () => {
+    axios.get(route('api.titles.list'))
+        .then(({data}) => {
+            titles.value = data.results;
+        })
+        .catch(error => {
+            useToast().open({
+                message: error.response ? error.response.data.message : error,
+                type: 'error',
+                duration: 5000,
+                position: 'top',
+            });
+        });
 });
 </script>
 
@@ -31,6 +51,16 @@ const form = useForm({
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+            <div class="mt-2 form-group row">
+                <label class="col-sm-2 col-form-label" for="title">Title</label>
+                <div class="col-sm-10">
+                    <select name="title" id="title" v-model="form.title" class="form-select" autofocus>
+                        <option value="">Select Title...</option>
+                        <option v-for="(title, index) in titles" :value="title" :key="index">{{ title }}</option>
+                    </select>
+                    <InputError class="mt-2" :message="form.errors.title" />
+                </div>
+            </div>
             <div class="mt-2 form-group row">
                 <label class="col-sm-2 col-form-label" for="forename">Forename</label>
                 <div class="col-sm-10">

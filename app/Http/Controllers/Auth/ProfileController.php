@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BasicUserRequest;
+use App\Http\Requests\Auth\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,9 +28,10 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(BasicUserRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = Auth::user();
+        $user->title = $request->input('title');
         $user->forename = $request->input('forename');
         $user->surname = $request->input('surname');
         $user->email = $request->input('email');
