@@ -46,6 +46,8 @@ class UserController extends Controller
                             });
                     },
                 )
+                ->where('id', '!=', auth()->user()->id)
+                ->with('roles.permissions')
                 ->orderBy('id')
                 ->paginate($per_page);
         } catch (Throwable $exception) {
