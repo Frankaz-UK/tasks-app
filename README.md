@@ -7,22 +7,27 @@
 - [Node](https://nodejs.org/en/download)
 - [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
-**1. Open the repository folder in your terminal**
+**1. Open the repository root folder in your terminal**
 
 run `composer install`
 
 run `npm install`
 
-**2. Copy the .env.local.example file to .env**
+If you have any errors with the packages please check with the [npm](https://www.npmjs.com/package/) database or [packagist](https://packagist.org/) (composer) database.
 
-**3. run `php artisan key:generate` to generate a new app key.**
+**2. In the repository root folder copy the .env.local.example file to .env**
 
-**4. You will need three tabs open in your terminal in the repositories folder for the following section:**
+**3. In your terminal run `php artisan key:generate` to generate a new app key.**
 
+**4. You will need three tabs open in your terminal in the repository root folder for the following section:**
+
+Tab 1:
 run `./vendor/bin/sail up`
 
+Tab 2:
 run `npm run dev`
 
+Tab 3:
 run `./vendor/bin/sail artisan migrate:fresh --seed` (adds entries to the database for users with roles and tasks)
 
 **5. Navigate to http://localhost**
