@@ -48,6 +48,7 @@ class UserController extends Controller
                 )
                 ->where('id', '!=', auth()->user()->id)
                 ->with('roles.permissions')
+                ->with('permissions')
                 ->orderBy('id')
                 ->paginate($per_page);
         } catch (Throwable $exception) {
@@ -82,8 +83,8 @@ class UserController extends Controller
             $user->position = $request->input('position');
             $user->telephone  = $request->input('telephone');
             $user->gender = $request->input('gender');
-            $user->save();
             $user->syncRoles($request->input('role'));
+            $user->save();
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),
@@ -113,8 +114,9 @@ class UserController extends Controller
             $user->position = $request->input('position');
             $user->telephone  = $request->input('telephone');
             $user->gender = $request->input('gender');
-            $user->save();
             $user->syncRoles($request->input('role'));
+            $user->syncPermissions($request->input('permissions'));
+            $user->save();
         } catch (Throwable $exception) {
             return response()->json([
                 'message' => $exception->getMessage(),

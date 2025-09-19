@@ -124,7 +124,7 @@
                                     class="form-check-input"
                                     :id="'permission-' + can"
                                     type="checkbox"
-                                    :checked="form.permissions.includes(can)"
+                                    v-model="form.permissions"
                                 >
                                 <label :for="'permission-' + can" class="form-check-label">{{ can.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</label>
                             </div>
@@ -140,7 +140,7 @@
                 <div class="row">
                     <div class="col-12 me-2">
                         <span v-for="role in data.item.roles" class="inline-block">
-                            {{ role.name }}
+                            {{ role.name.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}
                         </span>
                     </div>
                 </div>
@@ -339,7 +339,9 @@ export default {
             this.addUserModal = true;
         },
         editUser(user) {
-            let permissions = cloneDeep(user.roles[0].permissions);
+            let userPermissions = cloneDeep(user.permissions);
+            let rolePermissions = cloneDeep(user.roles[0].permissions);
+            let permissions = [...new Set([...userPermissions, ...rolePermissions])];
             this.user_id = user.id;
             this.form.id = user.id;
             this.form.title = user.title;
@@ -368,6 +370,7 @@ export default {
                 telephone: this.form.telephone,
                 gender: this.form.gender,
                 role: this.form.role,
+                permissions: this.form.permissions,
                 _method: method,
             })
                 .then(({data}) => {
