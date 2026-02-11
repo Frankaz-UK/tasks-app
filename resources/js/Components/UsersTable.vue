@@ -104,7 +104,7 @@
                     <div v-if="$page.props.auth.role.includes('super-admin') && form.id !== $page.props.auth.user.id" class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="role">Role</label>
                         <div class="col-sm-10">
-                            <select name="role" id="role" v-model="form.role" class="form-select" @click="form.validate('role')">
+                            <select @change="setPermissions()" name="role" id="role" v-model="form.role" class="form-select" @click="form.validate('role')">
                                 <option value="">Select Role...</option>
                                 <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
                             </select>
@@ -339,9 +339,6 @@ export default {
             this.addUserModal = true;
         },
         editUser(user) {
-            let userPermissions = cloneDeep(user.permissions);
-            let rolePermissions = cloneDeep(user.roles[0].permissions);
-            let permissions = [...new Set([...userPermissions, ...rolePermissions])];
             this.user_id = user.id;
             this.form.id = user.id;
             this.form.title = user.title;
@@ -352,8 +349,21 @@ export default {
             this.form.telephone = user.telephone;
             this.form.gender = user.gender;
             this.form.role = user.roles[0].name;
-            this.form.permissions = this.formatPermissions(permissions);
+            this.setPermissions(user)
             this.addUser();
+        },
+        setPermissions(user) {
+            let permissions;
+
+            if (user) {
+                let userPermissions = cloneDeep(user.permissions);
+                let rolePermissions = cloneDeep(user.roles[0].permissions);
+                permissions = this.formatPermissions([...new Set([...userPermissions, ...rolePermissions])]);
+            } else {
+                permissions = this.page.props.auth.rolePermissions[this.form.role] ?? [];
+            }
+
+            this.form.permissions = permissions;
         },
         saveUser() {
             let params = (this.user_id == null) ? {} : { user: this.user_id };
