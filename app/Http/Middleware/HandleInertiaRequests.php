@@ -39,9 +39,10 @@ class HandleInertiaRequests extends Middleware
                 'appName' => config('app.name'),
                 'auth' => [
                     'user' => $request->user(),
-                    'full_name' => $request->user()->full_name ?? null,
+                    'fullName' => $request->user()->full_name ?? null,
                     'role' => $request->user()->roles() ? $request->user()->roles()->pluck('name') : [],
                     'roles' => Role::all()->pluck('name')->toArray(),
+                    'rolePermissions' => Role::with('permissions')->get()->pluck('permissions.*.name', 'name'),
                     'can' => collect(Permission::all()->flatMap(function (Permission $permission) {
                         return [$permission->name => Auth::user()->can($permission->name, User::class)];
                     })),

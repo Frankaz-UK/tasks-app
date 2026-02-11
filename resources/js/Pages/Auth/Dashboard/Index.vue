@@ -15,7 +15,7 @@ import UsersBarChart from "@/Components/UsersBarChart.vue";
                     <div class="card-body text-dark">
                         <div class="row">
                             <div class="col-12">
-                                <h2 class="text-center">Welcome back <b class="text-primary">{{ $page.props.auth.full_name }}</b>!</h2>
+                                <h2 class="text-center">Welcome back <b class="text-primary">{{ $page.props.auth.fullName }}</b>!</h2>
                             </div>
                             <div class="col-12 pt-4">
                                 <h2>Users Tasks Overview</h2>

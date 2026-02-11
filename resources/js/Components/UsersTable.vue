@@ -101,10 +101,10 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="$page.props.auth.role.includes('super-admin')" class="form-group row mt-4">
+                    <div v-if="$page.props.auth.role.includes('super-admin') && form.id !== $page.props.auth.user.id" class="form-group row mt-4">
                         <label class="col-sm-2 col-form-label" for="role">Role</label>
                         <div class="col-sm-10">
-                            <select name="role" id="role" v-model="form.role" class="form-select" @click="form.validate('role')">
+                            <select @change="setPermissions()" name="role" id="role" v-model="form.role" class="form-select" @click="form.validate('role')">
                                 <option value="">Select Role...</option>
                                 <option v-for="role in $page.props.auth.roles" :value="role">{{ role.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</option>
                             </select>
@@ -112,6 +112,21 @@
                                 <div v-if="form.invalid('role')" class="col-sm-12 text-danger">
                                     {{ form.errors.role }}
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="$page.props.auth.role.includes('super-admin') && form.id !== $page.props.auth.user.id && user_id != null" class="form-group row mt-4">
+                        <div class="col-3 mb-2" v-for="(index, can) in $page.props.auth.can">
+                            <div class="form-check form-switch">
+                                <input
+                                    name="selectedPermissions[]"
+                                    :value="can"
+                                    class="form-check-input"
+                                    :id="'permission-' + can"
+                                    type="checkbox"
+                                    v-model="form.permissions"
+                                >
+                                <label :for="'permission-' + can" class="form-check-label">{{ can.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}</label>
                             </div>
                         </div>
                     </div>
@@ -125,7 +140,7 @@
                 <div class="row">
                     <div class="col-12 me-2">
                         <span v-for="role in data.item.roles" class="inline-block">
-                            {{ role.name }}
+                            {{ role.name.toString().replace('-', ' ').toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase()) }}
                         </span>
                     </div>
                 </div>
@@ -163,6 +178,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {BTable, BPagination, BModal} from "bootstrap-vue-next";
 import InputError from "@/Components/InputError.vue";
 import {useForm} from 'laravel-precognition-vue';
+import { cloneDeep } from 'lodash';
 
 export default {
     name: 'Users Table',
@@ -218,6 +234,7 @@ export default {
                 telephone: '',
                 gender: '',
                 role: '',
+                permissions: [],
             }),
         }
     },
@@ -275,6 +292,13 @@ export default {
                     });
                 });
         },
+        formatPermissions(permissions) {
+            permissions.forEach(function (permission, index, arr) {
+                arr[index] = permission.name;
+            });
+
+            return permissions;
+        },
         deleteUser(userId) {
             axios.post(route('api.users.destroy', {user: userId}), {
                 _method: 'delete',
@@ -325,7 +349,21 @@ export default {
             this.form.telephone = user.telephone;
             this.form.gender = user.gender;
             this.form.role = user.roles[0].name;
+            this.setPermissions(user)
             this.addUser();
+        },
+        setPermissions(user) {
+            let permissions;
+
+            if (user) {
+                let userPermissions = cloneDeep(user.permissions);
+                let rolePermissions = cloneDeep(user.roles[0].permissions);
+                permissions = this.formatPermissions([...new Set([...userPermissions, ...rolePermissions])]);
+            } else {
+                permissions = this.page.props.auth.rolePermissions[this.form.role] ?? [];
+            }
+
+            this.form.permissions = permissions;
         },
         saveUser() {
             let params = (this.user_id == null) ? {} : { user: this.user_id };
@@ -342,6 +380,7 @@ export default {
                 telephone: this.form.telephone,
                 gender: this.form.gender,
                 role: this.form.role,
+                permissions: this.form.permissions,
                 _method: method,
             })
                 .then(({data}) => {
