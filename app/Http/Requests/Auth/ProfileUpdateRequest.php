@@ -25,7 +25,7 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'position' => 'required|string|min:5|max:255',
-            'telephone' => 'required|phone:GB',
+            'telephone' => 'required',
             'gender' => 'required|string|in:Male,Female',
         ];
     }
@@ -42,6 +42,7 @@ class ProfileUpdateRequest extends FormRequest
             'surname.string' => 'The surname field must be a string',
             'surname.min' => 'The surname field must be at least :min characters',
             'surname.max' => 'The surname field must be less than :max characters',
+            'telephone.required' => 'The telephone field is required',
             'email.required' => 'The email field is required',
             'email.string' => 'The email field must be a string',
             'email.email' => 'The email field must be a valid email address',
