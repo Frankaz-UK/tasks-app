@@ -24,8 +24,6 @@
         "bootstrap": "^5.3.3",
         "bootstrap-vue-next": "^0.26.28",
         "chart.js": "^4.4.9",
-        "flowbite": "^3.1.1",
-        "flowbite-vue": "^0.1.7",
         "laravel-precognition-vue": "^0.7.2",
         "laravel-precognition-vue-inertia": "^0.7.2",
         "lodash": "^4.17.21",
