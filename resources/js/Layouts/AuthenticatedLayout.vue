@@ -17,7 +17,7 @@ defineProps({
 const page = usePage();
 
 function routeCheck(url) {
-    return url.includes(page.url);
+    return url.replace(page.props.ziggy.url, '').includes(page.url);
 }
 </script>
 
